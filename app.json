@@ -1,37 +1,12 @@
 {
   "expo": {
-    "name": "DriverKu",
-    "slug": "DriverKu",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/driverku-icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/driverku-splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "K6.DriverKu"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/driverku-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "K6.DriverKu"
-    },
-    "web": {
-      "favicon": "./assets/driverku-icon.png"
-    },
     "extra": {
       "eas": {
-        "projectId": "c3e64977-a18e-463b-bbc7-3cbf89eec6ac"
+        "projectId": "2eacb5ba-3d82-431e-9eb9-43e6deae2dba"
       }
+    },
+    "android": {
+      "package": "k6.driverku"
     }
   }
 }
