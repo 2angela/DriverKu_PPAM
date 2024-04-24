@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "366081264979",
+    "project_id": "ppam-driverku",
+    "storage_bucket": "ppam-driverku.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366081264979:android:78f9fa8e3ccee5e74a25a6",
+        "android_client_info": {
+          "package_name": "com.PPAM.DriverKu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrbJsgm-ffoWvCU7b4nc4_cr4z7xEXves"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
