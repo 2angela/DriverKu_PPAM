@@ -3,6 +3,7 @@
     "name": "DriverKu",
     "slug": "DriverKu",
     "version": "1.0.0",
+    "scheme": "ppamDriverKu",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,23 +12,40 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.PPAM.DriverKu",
+      "googleServicesFile": "./google-services/dev/GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "k6.driverku"
+      "package": "com.PPAM.DriverKu",
+      "googleServicesFile": "./google-services/dev/google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      "expo-router",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ],
     "extra": {
+      "router": {
+        "origin": false
+      },
       "eas": {
         "projectId": "2ef1329a-8016-44a1-a0e9-f658015c2ac8"
       }
