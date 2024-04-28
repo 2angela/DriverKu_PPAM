@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { useAuth } from "../../auth/AuthProvider";
-import { TextInput } from "react-native-paper";
+import { IconButton } from "react-native-paper";
 import { Link, router } from 'expo-router';
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
       <View style={styles.textRow}>
         <Text style={styles.title}>Book Drivers</Text>
         <Text style={styles.title}>Near Me!</Text>
-        <Text style={styles.text}>First Select Your Car Type!</Text>
+        <Text style={styles.text}>First, Select Your Car Type!</Text>
       </View>
 
       <View style={styles.boxContainer}>
@@ -29,7 +29,7 @@ export default function Home() {
           <Link href="/Booking">
             <View style={styles.box}>
               <Image
-                source={require('../../assets/matic.png')} // Replace with your image source
+                source={require('../../assets/matic.png')}
                 style={styles.boxImage}
               />
               <Text style={styles.boxText}>Matic</Text>
@@ -42,7 +42,7 @@ export default function Home() {
           <Link href="/Booking">
             <View style={styles.box}>
               <Image
-                source={require('../../assets/manual.png')} // Replace with your image source
+                source={require('../../assets/manual.png')} 
                 style={styles.boxImage}
               />
               <Text style={styles.boxText}>Manual</Text>
@@ -53,24 +53,18 @@ export default function Home() {
 
       {/* Dashboard with buttons */}
       <View style={styles.dashboard}>
-      <TouchableOpacity onPress={() => router.push("/Home")} style={styles.iconContainer}>
-        <View style={styles.iconContent}>
-          <TextInput.Icon icon="home" color="#836FFF" size={30} />
+        <View style={styles.iconContainer}>
+          <IconButton icon="home" iconColor="#836FFF" size={30} onPress={() => router.push("/Home")} style={{ margin: 0, padding: 0 }}/>
           <Text style={styles.iconTextChosen}>Home</Text>
         </View>
-      </TouchableOpacity>
-      <Link href="/Order/index" style={styles.iconContainer}>
-        <View style={styles.iconContent}>
-          <TextInput.Icon icon="book" color="#211951" size={30} />
+        <View style={styles.iconContainer}>
+          <IconButton icon="book" iconColor="#211951" size={30} onPress={() => router.push("/Order")} style={{ margin: 0, padding: 0 }}/>
           <Text style={styles.iconText}>Orders</Text>
         </View>
-      </Link>
-      <Link href="/Profile" style={styles.iconContainer}>
-        <View style={styles.iconContent}>
-          <TextInput.Icon icon="account" color="#211951" size={30} />
+        <View style={styles.iconContainer}>
+          <IconButton icon="account" iconColor="#211951" size={30} onPress={() => router.push("/Profile")}  style={{ margin: 0, padding: 0 }}/>
           <Text style={styles.iconText}>Profile</Text>
         </View>
-      </Link>
       </View>
 
     </View>
@@ -139,32 +133,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    paddingVertical: 10,
-    paddingHorizontal: 40,
+    paddingVertical: 0,
+    paddingHorizontal: 30,
     backgroundColor: '#F0F3FF',
     position: 'absolute',
     bottom: 0,
     height: '10%',
   },
-  iconContainer: {
+  iconContainer:{
     alignItems: 'center',
-    marginTop:4,
-  },
-  iconContent:{
-    alignItems: 'center',
+    justifyContent:'center',
   },
   iconText: {
-    marginTop: 25,
     textAlign: 'center',
     fontSize: 8,
     fontFamily:'MontserratBold',
     color: '#211951',
+    marginBottom: 10,
   },
   iconTextChosen: {
-    marginTop: 25,
     textAlign: 'center',
     fontSize: 8,
     fontFamily:'MontserratBold',
     color: '#836FFF',
+    marginBottom: 10,
   },
 });
