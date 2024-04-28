@@ -2,13 +2,14 @@ import React from 'react';
 import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
 import { Link, Redirect } from 'expo-router';
 import { useAuth } from '../auth/AuthProvider';
-import { useFonts, Montserrat_500Medium, Montserrat_700Bold, Montserrat_800ExtraBold } from '@expo-google-fonts/montserrat';
+import { useFonts, Montserrat_500Medium, Montserrat_700Bold, Montserrat_800ExtraBold, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
 
 export default function Index() {
     const [fontsLoaded] = useFonts({
         MontserratMedium: Montserrat_500Medium,
         MontserratBold: Montserrat_700Bold,
         MontserratExtraBold: Montserrat_800ExtraBold,
+        MontserratSemiBold: Montserrat_600SemiBold,
       });
     
       if (!fontsLoaded) {
