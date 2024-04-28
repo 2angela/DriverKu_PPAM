@@ -1,3 +1,4 @@
+
 import { Text, TouchableOpacity, View, Image} from "react-native";
 import {Link, Redirect} from "expo-router";
 import { useAuth } from "../contexs/AuthProvider";
@@ -53,3 +54,4 @@ export default function Index(){
 
     
 }
+

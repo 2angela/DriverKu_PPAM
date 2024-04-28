@@ -1,12 +1,11 @@
-import  { useAuth } from "../../contexs/AuthProvider";
-import {Stack, Redirect} from "expo-router";
+import { useAuth } from "../../auth/AuthProvider";
+import { Stack, Redirect } from "expo-router";
 
-export default function ProtectedLayout(){
-        const { isLoggedIn } = useAuth();
+export default function ProtectedLayout() {
+  const { isLoggedIn } = useAuth();
 
-        
-        if(!isLoggedIn){
-            return <Redirect href="/sign-in" />
-        }
-        return <Stack/>
+  if (!isLoggedIn) {
+    return <Redirect href="/sign-in" />;
+  }
+  return <Stack />;
 }
