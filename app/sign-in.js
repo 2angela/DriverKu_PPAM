@@ -98,8 +98,8 @@ export default function SignInScreen(){
             </Button>
            
            
-            <Link href="/sign-up" >Create a new acccount.</Link>
-            <Link href="/" >Go To Landing</Link>
+            <Link href="/sign-up" >Don't have an account? Sign Up</Link>
+            <Link href="/" >Home</Link>
             
         </View>
     );
