@@ -1,9 +1,9 @@
-import { View, StyleSheet } from "react-native";
-import { TextInput, Button, Title, HelperText } from "react-native-paper";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { TextInput, Title, HelperText } from "react-native-paper";
 import { Link, router } from "expo-router";
 import { useAuth } from "../auth/AuthProvider";
 import { useState } from "react";
-export default function SignInScreen() {
+export default function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -29,7 +29,7 @@ export default function SignInScreen() {
     }
 
     if (!repeatPassword) {
-      newErrors.password = "Repeat Password is required";
+      newErrors.repeatPassword = "Repeat Password is required";
     } else if (password !== repeatPassword) {
       newErrors.repeatPassword = "Repeat Password is not equal with password";
     }
@@ -44,7 +44,7 @@ export default function SignInScreen() {
       console.log(findErrors);
       setErrors(findErrors);
     } else {
-      signUp(email, password)
+      signUp( email, password)
         .then((res) => {
           console.log("login success", res);
           router.replace("/Home");
@@ -69,8 +69,8 @@ export default function SignInScreen() {
       <Title style={styles.title}>Sign Up</Title>
       <View style>
         <TextInput
-          left={<TextInput.Icon icon="email" />}
-          label="Email"
+          left={<TextInput.Icon icon="email" color="#211951" />}
+          label={<Text style={styles.label}>Email</Text>}
           value={email}
           mode="outlined"
           onChangeText={(email) => {
@@ -83,8 +83,8 @@ export default function SignInScreen() {
           {errors.email}
         </HelperText>
         <TextInput
-          left={<TextInput.Icon icon="key" />}
-          label="Password"
+          left={<TextInput.Icon icon="key" color="#211951" />}
+          label={<Text style={styles.label}>Password</Text>}
           value={password}
           mode="outlined"
           onChangeText={(password) => {
@@ -98,8 +98,8 @@ export default function SignInScreen() {
           {errors.password}
         </HelperText>
         <TextInput
-          left={<TextInput.Icon icon="key" />}
-          label="Repeat Password"
+          left={<TextInput.Icon icon="key" color="#211951"/>}
+          label={<Text style={styles.label}>Repeat Password</Text>}
           value={repeatPassword}
           mode="outlined"
           onChangeText={(password) => {
@@ -113,12 +113,26 @@ export default function SignInScreen() {
       <HelperText type="error" visible={errors.repeatPassword !== ""}>
         {errors.repeatPassword}
       </HelperText>
-      <Button mode="contained" onPress={handleSignIn} style={styles.button}>
-        Sign Up
-      </Button>
 
-      <Link href="/sign-in">Already have account?</Link>
-      <Link href="/">Go To Landing</Link>
+      <TouchableOpacity onPress={handleSignIn} style={styles.button}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+
+      <View style={styles.linkContainer}>
+        <Text style={styles.text}>
+          Have an account?{" "}
+          <Link href="/sign-in" style={styles.link}>
+            Sign In
+          </Link>
+        </Text>
+      </View>
+
+      <View style={styles.centeredLink}>
+        <Link href="/" style={styles.homeLink}>
+          Home
+        </Link>
+      </View>
+
     </View>
   );
 }
@@ -130,12 +144,53 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
+    fontSize: 28,
     textAlign: "center",
     marginBottom: 20,
+    color: "#211951",
+    fontFamily: "MontserratExtraBold",
   },
   button: {
+    alignSelf: "center",
+    marginBottom: 20,
+    padding: 10,
+    backgroundColor: "#211951",
+    borderRadius: 8,
+    alignItems: "center",
+    width: "40%",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontFamily: "MontserratBold",
+  },
+  linkContainer: {
+    alignItems: "center",
     marginBottom: 10,
+  },
+  text: {
+    textAlign: "center",
+    fontFamily: "MontserratMedium",
+    fontSize: 12,
+    color: "#211951",
+  },
+  link: {
+    textDecorationLine: "underline",
+    fontFamily: "MontserratBold",
+    fontSize: 12,
+    color: "#211951",
+  },
+  centeredLink: {
+    alignItems: "center",
+  },
+  homeLink: {
+    textDecorationLine: "underline",
+    fontFamily: "MontserratBold",
+    fontSize: 12,
+    color: "#211951",
+  },
+  label: {
+    fontFamily: "MontserratMedium",
+    fontSize: 12,
   },
 });

@@ -1,57 +1,107 @@
-
-import { Text, TouchableOpacity, View, Image} from "react-native";
-import {Link, Redirect} from "expo-router";
-import { useAuth } from "../contexs/AuthProvider";
-import FontRegistry from '../FontRegistry';
+import React from 'react';
+import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
+import { Link, Redirect } from 'expo-router';
+import { useAuth } from '../auth/AuthProvider';
 import { useFonts, Montserrat_500Medium, Montserrat_700Bold, Montserrat_800ExtraBold } from '@expo-google-fonts/montserrat';
 
-export default function Index(){
-    const { user } = useAuth();
-
-    // Load fonts using useFonts hook
+export default function Index() {
     const [fontsLoaded] = useFonts({
         MontserratMedium: Montserrat_500Medium,
         MontserratBold: Montserrat_700Bold,
         MontserratExtraBold: Montserrat_800ExtraBold,
-    });
-
-    // Log the value of fontsLoaded directly inside the component function
-    console.log(fontsLoaded); 
-
-    if(user){
-        return <Redirect href={"/home"}/>
+      });
+    
+      if (!fontsLoaded) {
+        return null; // Or a loading indicator
     }
+    const { user } = useAuth();
+
+    if (user) {
+        return <Redirect href={'/home'} />;
+    }
+    
+    const handleSignIn = () => {
+        // Handle button press
+    };
+
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.container}>
             <Image
-                source={require('../assets/icon.png')}
-                style={{ width: '80%', height: '40%', resizeMode: 'cover',  marginTop: 40 }}
+                source={require('../assets/driver.png')}
+                style={styles.image}
             />
-            
-            {/* Box with two rows of text and a button */}
-            <View style={{ marginTop: 10, padding: 20, backgroundColor: '#211951',  flex: 1, alignItems: 'center', justifyContent: 'center',  width: '100%'  }}>
-                <Text style={{ fontSize: 35, fontFamily: FontRegistry.MontserratBold, color: '#15F5BA' }}>Wherever You Go,</Text>
-                <Text style={{ fontSize: 35, fontFamily: FontRegistry.MontserratBold, color: '#15F5BA' }}>Your Driver Follows:</Text>
-                <Text style={{ fontSize: 35, marginBottom: 30, fontFamily: FontRegistry.MontserratBold, color: '#15F5BA' }}>Book Now!</Text>
-                <Text style={{ fontSize: 15,  fontFamily: FontRegistry.MontserratMedium, color: 'white' }}>We provide the best drivers in</Text>
-                <Text style={{ fontSize: 15, marginBottom: 20, fontFamily: FontRegistry.MontserratMedium, color: 'white' }}>town to guarantee your safety!</Text>
+            <View style={styles.content}>
+                <Text style={[styles.title, styles.titleSpacing]}>Wherever You Go,</Text>
+                <Text style={[styles.title, styles.titleSpacing]}>Your Driver Follows:</Text>
+                <Text style={[styles.title, styles.betweenSpacing]}>Book Now!</Text>
+                <Text style={[styles.description, styles.descriptionSpacing]}>We provide the best drivers in</Text>
+                <Text style={[styles.description, styles.descriptionSpacing]}>town to guarantee your safety!</Text>
                 {/* Button */}
                 <Link href="/sign-in" asChild>
-                <TouchableOpacity
-                    onPress={() => {
-                        // Handle button press
-                    }}
-                    style={{ marginTop:20, padding: 10, backgroundColor: 'white', borderRadius: 5, alignItems: 'center', width:'50%'}}
-                >
-                    <Text style={{ color: '#211951', fontSize: 20, fontFamily: 'Roboto-Bold' }}>Sign In</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={handleSignIn}
+                        style={styles.button}
+                    >
+                        <Text style={styles.buttonText}>Sign In</Text>
+                    </TouchableOpacity>
                 </Link>
-                
             </View>
         </View>
-
     );
-
-    
 }
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    image: {
+        width: '80%',
+        height: '40%',
+        resizeMode: 'cover',
+        marginTop: 40,
+        marginBottom: 30,
+    },
+    content: {
+        marginTop: 10,
+        padding: 20,
+        backgroundColor: '#211951',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+    },
+    title: {
+        fontSize: 28,
+        fontFamily: 'MontserratExtraBold',
+        color: '#15F5BA',
+    },
+    description: {
+        fontSize: 14,
+        fontFamily: 'MontserratBold',
+        color: 'white',
+    },
+    button: {
+        marginTop: 25,
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 8,
+        alignItems: 'center',
+        width: '40%',
+    },
+    buttonText: {
+        color: '#211951',
+        fontSize: 18,
+        fontFamily: 'MontserratBold',
+    },
+    titleSpacing:{
+        marginBottom: 3,
+    },
+    descriptionSpacing:{
+        marginBottom: 3,
+    },
+    betweenSpacing:{
+        marginBottom: 30,
+    },
+});
