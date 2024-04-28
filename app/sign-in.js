@@ -40,7 +40,7 @@ export default function SignInScreen() {
       signIn(email, password)
         .then((res) => {
           console.log("login success", res);
-          router.replace("/home");
+          router.replace("/Home");
         })
         .catch((error) => {
           let newErrors = {
