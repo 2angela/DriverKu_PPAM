@@ -3,6 +3,7 @@ import { TextInput, Title, HelperText } from "react-native-paper";
 import { Link, router } from "expo-router";
 import { useAuth } from "../auth/AuthProvider";
 import { useState } from "react";
+import firestore from "@react-native-firebase/firestore";
 export default function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,9 +45,20 @@ export default function SignUpScreen() {
       console.log(findErrors);
       setErrors(findErrors);
     } else {
-      signUp( email, password)
-        .then((res) => {
-          console.log("login success", res);
+      signUp(email, password)
+        .then(async (res) => {
+          const uid = res.user.uid;
+          const db = firestore().collection("Customer").doc(uid);
+          await db
+            .set({ email })
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              console.error(error);
+              return null;
+            });
+
           router.replace("/Home");
         })
         .catch((error) => {
@@ -98,7 +110,7 @@ export default function SignUpScreen() {
           {errors.password}
         </HelperText>
         <TextInput
-          left={<TextInput.Icon icon="key" color="#211951"/>}
+          left={<TextInput.Icon icon="key" color="#211951" />}
           label={<Text style={styles.label}>Repeat Password</Text>}
           value={repeatPassword}
           mode="outlined"
@@ -132,7 +144,6 @@ export default function SignUpScreen() {
           Home
         </Link>
       </View>
-
     </View>
   );
 }
