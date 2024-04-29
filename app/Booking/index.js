@@ -170,19 +170,21 @@ export default function BookingCreate() {
         )}
 
         {/* End Date Picker */}
-        <TextInput
-          label={<Text style={styles.label}>End Date</Text>}
-          value={endDate.toDateString()}
-          onTouchStart={() => setShowEndDatePicker(true)}
-        />
-        {showEndDatePicker && (
-          <DateTimePicker
-            value={endDate}
-            mode="datetime"
-            display="spinner"
-            onChange={handleEndDateChange}
+        <View style={styles.enddatefieldContainer}>
+          <TextInput
+            label={<Text style={styles.label}>End Date</Text>}
+            value={endDate.toDateString()}
+            onTouchStart={() => setShowEndDatePicker(true)}
           />
-        )}
+          {showEndDatePicker && (
+            <DateTimePicker
+              value={endDate}
+              mode="datetime"
+              display="spinner"
+              onChange={handleEndDateChange}
+            />
+          )}
+        </View>
 
         <TextInput
           left={
@@ -269,8 +271,8 @@ const styles = StyleSheet.create({
   },
   textRow: {
     width: "100%",
-    marginTop: 40,
-    marginBottom: 25,
+    marginTop: 30,
+    marginBottom: 15,
     alignItems: "center",
   },
   title: {
@@ -285,11 +287,13 @@ const styles = StyleSheet.create({
     color: "white",
     alignSelf: "center",
     marginBottom: 20,
-    padding: 5,
     backgroundColor: "#211951",
     borderRadius: 8,
     alignItems: "center",
     width: "40%",
+    paddingHorizontal:5,
+    paddingTop:0,
+    paddingBottom:0,
   },
   buttonText: {
     color: "white",
@@ -329,4 +333,8 @@ const styles = StyleSheet.create({
     fontFamily: "MontserratMedium",
     fontSize: 12,
   },
+  enddatefieldContainer:{
+    marginBottom:20,
+    marginTop:20,
+  }
 });
