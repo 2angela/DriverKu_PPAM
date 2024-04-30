@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { TextInput, Title, HelperText } from "react-native-paper";
-import { Link, router } from "expo-router";
+import { Link, router, Redirect } from "expo-router";
 import { useAuth } from "../auth/AuthProvider";
 import { useState } from "react";
 import firestore from "@react-native-firebase/firestore";
@@ -13,7 +13,11 @@ export default function SignUpScreen() {
     password: "",
     repeatPassword: "",
   });
-  const { signUp } = useAuth();
+
+  const { signUp, user } = useAuth();
+  if (user) {
+    return <Redirect href={"/Home"} />;
+  }
 
   const validate = () => {
     let newErrors = {

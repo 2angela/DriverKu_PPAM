@@ -1,11 +1,12 @@
 import { Text, View } from "react-native";
-import { Stack, router } from "expo-router";
+import { Link, router } from "expo-router";
 import firestore from "@react-native-firebase/firestore";
 import { useAuth } from "../../auth/AuthProvider";
 import { useEffect, useState } from "react";
 import { IconButton } from "react-native-paper";
+import NavigationBar from "../components/navigationbar";
 
-export default function Order() {
+export default function Orders() {
   const { user } = useAuth();
   const [orders, setOrders] = useState();
   const order_time = "test";
@@ -36,6 +37,7 @@ export default function Order() {
         paddingTop: 60,
       }}
     >
+      <Link href={"./order/details"}>order details</Link>
       <View style={{ flexDirection: "row" }}>
         <View style={{ width: "40%" }}>
           <IconButton
@@ -99,6 +101,7 @@ export default function Order() {
           </View>
         </View>
       </View>
+      <NavigationBar page="orders" />
     </View>
   );
 }

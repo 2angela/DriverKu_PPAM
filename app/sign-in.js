@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { TextInput, Button, Title, HelperText } from "react-native-paper";
-import { Link, router } from "expo-router";
+import { Link, router, Redirect } from "expo-router";
 import { useAuth } from "../auth/AuthProvider";
 import { useState } from "react";
 
@@ -11,7 +11,10 @@ export default function SignInScreen() {
     email: "",
     password: "",
   });
-  const { signIn } = useAuth();
+  const { signIn, user } = useAuth();
+  if (user) {
+    return <Redirect href={"/Home"} />;
+  }
 
   const validate = () => {
     let newErrors = {
