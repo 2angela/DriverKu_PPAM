@@ -3,12 +3,36 @@ import NavigationBar from "../components/navigationbar";
 import { useAuth } from "../../auth/AuthProvider";
 import { Button } from "react-native-paper";
 import firestore from "@react-native-firebase/firestore";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [birthyear, setBirthyear] = useState("");
   const handleSignOut = () => {
     signOut();
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await firestore()
+          .collection("Customer")
+          .doc(user?.uid)
+          .get();
+        const data = querySnapshot.data();
+        if (data) {
+          setName(data.name);
+          setEmail(data.email);
+          setBirthyear(data.birthyear);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
@@ -16,9 +40,9 @@ export default function Profile() {
         source={require("../../assets/profile.png")}
         style={{ width: "30%", height: "16%" }}
       />
-      <Text style={styles.name}>Name</Text>
-      <Text style={styles.contents}>Email</Text>
-      <Text style={styles.contents}>Birthdate</Text>
+      <Text style={styles.name}>{name}</Text>
+      <Text style={styles.contents}>{email}</Text>
+      <Text style={styles.contents}>Born in {birthyear}</Text>
       <Button
         onPress={handleSignOut}
         mode="contained"
