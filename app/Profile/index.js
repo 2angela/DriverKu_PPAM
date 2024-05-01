@@ -2,6 +2,7 @@ import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import NavigationBar from "../components/navigationbar";
 import { useAuth } from "../../auth/AuthProvider";
 import { Button } from "react-native-paper";
+import firestore from "@react-native-firebase/firestore";
 
 export default function Profile() {
   const { signOut } = useAuth();

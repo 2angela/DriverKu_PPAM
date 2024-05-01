@@ -106,12 +106,6 @@ export default function SignInScreen() {
           </Link>
         </Text>
       </View>
-
-      <View style={styles.centeredLink}>
-        <Link href="/" style={styles.homeLink}>
-          Home
-        </Link>
-      </View>
     </View>
   );
 }

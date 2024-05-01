@@ -108,7 +108,7 @@ export default function BookingCreate() {
         duration,
         created_at: firestore.FieldValue.serverTimestamp(),
       });
-      router.back();
+      router.push("/Home");
 
       setLoading(false);
     }

@@ -8,6 +8,8 @@ export default function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [name, setName] = useState("");
+  const [birthyear, setBirthyear] = useState("");
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -23,6 +25,8 @@ export default function SignUpScreen() {
     let newErrors = {
       email: "",
       password: "",
+      name: "",
+      birthyear: "",
     };
 
     if (!email) {
@@ -33,6 +37,16 @@ export default function SignUpScreen() {
       newErrors.password = "Password is required";
     }
 
+    if (!name) {
+      newErrors.name = "Name cannot be blank";
+    }
+
+    if (!birthyear || birthyear < 1800) {
+      newErrors.name = "Year of birth is required";
+    } else if (birthyear > 2006) {
+      newErrors.birthyear = "You must be 17 or older to use this app";
+    }
+
     if (!repeatPassword) {
       newErrors.repeatPassword = "Repeat Password is required";
     } else if (password !== repeatPassword) {
@@ -40,6 +54,11 @@ export default function SignUpScreen() {
     }
 
     return newErrors;
+  };
+
+  const handleNumberInput = (input) => {
+    const parsedInput = parseInt(input.replace(/[^0-9]/g, ""));
+    setBirthyear(parsedInput);
   };
 
   const handleSignIn = () => {
@@ -54,7 +73,11 @@ export default function SignUpScreen() {
           const uid = res.user.uid;
           const db = firestore().collection("Customer").doc(uid);
           await db
-            .set({ email })
+            .set({
+              email,
+              name,
+              birthyear,
+            })
             .then((response) => {
               console.log(response);
             })
@@ -99,6 +122,29 @@ export default function SignUpScreen() {
           {errors.email}
         </HelperText>
         <TextInput
+          left={<TextInput.Icon icon="account" color="#211951" />}
+          label={<Text style={styles.label}>Your Name</Text>}
+          value={name}
+          mode="outlined"
+          onChangeText={(name) => {
+            setName(name);
+          }}
+        />
+        <HelperText type="error" visible={errors.name !== ""}>
+          {errors.name}
+        </HelperText>
+        <TextInput
+          left={<TextInput.Icon icon="cake" color="#211951" />}
+          label={<Text style={styles.label}>Year of Birth</Text>}
+          value={birthyear}
+          mode="outlined"
+          keyboardType="numeric"
+          onChangeText={handleNumberInput}
+        />
+        <HelperText type="error" visible={errors.birthyear !== ""}>
+          {errors.birthyear}
+        </HelperText>
+        <TextInput
           left={<TextInput.Icon icon="key" color="#211951" />}
           label={<Text style={styles.label}>Password</Text>}
           value={password}
@@ -125,10 +171,10 @@ export default function SignUpScreen() {
           error={errors.repeatPassword !== ""}
           secureTextEntry
         />
+        <HelperText type="error" visible={errors.repeatPassword !== ""}>
+          {errors.repeatPassword}
+        </HelperText>
       </View>
-      <HelperText type="error" visible={errors.repeatPassword !== ""}>
-        {errors.repeatPassword}
-      </HelperText>
 
       <TouchableOpacity onPress={handleSignIn} style={styles.button}>
         <Text style={styles.buttonText}>Sign Up</Text>
@@ -141,12 +187,6 @@ export default function SignUpScreen() {
             Sign In
           </Link>
         </Text>
-      </View>
-
-      <View style={styles.centeredLink}>
-        <Link href="/" style={styles.homeLink}>
-          Home
-        </Link>
       </View>
     </View>
   );
