@@ -8,15 +8,18 @@ import NavigationBar from "../components/navigationbar";
 
 export default function Orders() {
   const { user } = useAuth();
-  const [orders, setOrders] = useState();
+  const [orders, setOrders] = useState([]);
   const order_time = "test";
   const status = "test";
 
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const ref = firestore().collection("Order").doc(1);
-        const response = await ref.get();
+        const querySnapshot = firestore()
+          .collection("Customer")
+          .doc(user?.uid)
+          .collection("Order");
+        const response = await querySnapshot.get();
         return response;
       } catch (error) {
         return error;

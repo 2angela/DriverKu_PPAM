@@ -18,10 +18,20 @@ export default function BookingCreate() {
   const navigation = useNavigation();
   const [pickup, setPickup] = useState("");
   const [area, setArea] = useState("");
+  const status = "Order Confirmed";
   const { user } = useAuth();
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
+
+  const [endDate, setEndDate] = useState(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
@@ -43,6 +53,7 @@ export default function BookingCreate() {
     startDate: "",
     endDate: "",
     duration: "",
+    status: "",
   });
 
   const validate = () => {
@@ -56,13 +67,13 @@ export default function BookingCreate() {
 
     if (!pickup.trim()) {
       newErrors.pickup = "Pick Up Location is Required";
-    } else if (pickup.length < 40) {
+    } else if (pickup.length < 15) {
       newErrors.pickup = "Please give more details for the pick up location";
     }
 
     if (!area.trim()) {
       newErrors.area = "Driving Area is Required";
-    } else if (area.length < 12) {
+    } else if (area.length < 1) {
       newErrors.description = "Area name must be at least 12 characters";
     }
 
@@ -72,7 +83,7 @@ export default function BookingCreate() {
 
     if (!endDate) {
       newErrors.endDate = "End Date is Required";
-    } else if (endDate <= startDate) {
+    } else if (endDate < startDate) {
       newErrors.endDate = "End Date cannot be before Start Date";
     }
 
@@ -97,7 +108,7 @@ export default function BookingCreate() {
       setLoading(true);
       const bookingColRef = firestore()
         .collection("Customer")
-        .doc(user.uid)
+        .doc(user?.uid)
         .collection("Order");
 
       await bookingColRef.add({
@@ -106,6 +117,7 @@ export default function BookingCreate() {
         startDate,
         endDate,
         duration,
+        status,
         created_at: firestore.FieldValue.serverTimestamp(),
       });
       router.push("/Home");

@@ -77,6 +77,7 @@ export default function SignUpScreen() {
               email,
               name,
               birthyear,
+              created_at: firestore.FieldValue.serverTimestamp(),
             })
             .then((response) => {
               console.log(response);

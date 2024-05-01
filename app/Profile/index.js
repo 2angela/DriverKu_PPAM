@@ -38,7 +38,7 @@ export default function Profile() {
       <Text style={styles.title}>Profile</Text>
       <Image
         source={require("../../assets/profile.png")}
-        style={{ width: "30%", height: "16%" }}
+        style={{ width: "30%", height: "16%", marginVertical: 20 }}
       />
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.contents}>{email}</Text>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     width: "150",
-    marginTop: 5,
+    marginTop: 20,
   },
   buttonText: {
     color: "white",
