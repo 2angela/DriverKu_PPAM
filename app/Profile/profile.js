@@ -1,17 +1,18 @@
-import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
 import NavigationBar from "../components/navigationbar";
 import { useAuth } from "../../auth/AuthProvider";
 import { Button } from "react-native-paper";
 import firestore from "@react-native-firebase/firestore";
 import { useEffect, useState } from "react";
 
-export default function Profile() {
+export default function Profile({ navigation }) {
   const { signOut, user } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [birthyear, setBirthyear] = useState("");
   const handleSignOut = () => {
     signOut();
+    navigation.navigate("Landing");
   };
 
   useEffect(() => {

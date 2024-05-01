@@ -4,7 +4,7 @@ import { Link, router, Redirect } from "expo-router";
 import { useAuth } from "../auth/AuthProvider";
 import { useState } from "react";
 
-export default function SignInScreen() {
+export default function SignInScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
@@ -13,7 +13,7 @@ export default function SignInScreen() {
   });
   const { signIn, user } = useAuth();
   if (user) {
-    return <Redirect href={"/Home"} />;
+    navigation.navigate("Home");
   }
 
   const validate = () => {
@@ -43,7 +43,7 @@ export default function SignInScreen() {
       signIn(email, password)
         .then((res) => {
           console.log("login success", res);
-          router.replace("/Home");
+          navigation.push("Home");
         })
         .catch((error) => {
           let newErrors = {

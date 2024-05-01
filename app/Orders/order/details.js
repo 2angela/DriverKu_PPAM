@@ -1,16 +1,30 @@
-import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import NavigationBar from "../../components/navigationbar";
 import { useAuth } from "../../../auth/AuthProvider";
-import { Button } from "react-native-paper";
+import { Button, IconButton } from "react-native-paper";
 
-export default function OrderDetails() {
+export default function OrderDetails({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text contentContainerStyle={styles.title}>Order Details</Text>
-      <Text contentContainerStyle={styles.name}></Text>
-      <Text contentContainerStyle={styles.contents}>Date</Text>
-      <Text contentContainerStyle={styles.contents}>Duration</Text>
-      <View contentContainerStyle={styles.box}></View>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <IconButton icon="arrow-left" size={24} iconColor="#211951" />
+      </TouchableOpacity>
+      <Text style={styles.title}>Order Details</Text>
+      <Image
+        source={require("../../../assets/orderdetails.png")}
+        style={styles.image}
+      />
+      <Text style={styles.name}></Text>
+      <Text style={styles.contents}>Date</Text>
+      <Text style={styles.contents}>Duration</Text>
+      <View style={styles.box}></View>
       <NavigationBar />
     </ScrollView>
   );
@@ -27,6 +41,10 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: "MontserratExtraBold",
     paddingVertical: 5,
+  },
+  image: {
+    width: 100,
+    height: 100,
   },
   name: {
     fontSize: 20,

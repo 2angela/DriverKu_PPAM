@@ -1,8 +1,7 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
-import { Link } from "expo-router";
 import NavigationBar from "../components/navigationbar";
 
-export default function Home() {
+export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
@@ -18,29 +17,33 @@ export default function Home() {
 
       <View style={styles.boxContainer}>
         {/* Matic */}
-        <TouchableOpacity onPress={() => console.log("Maticpressed")}>
-          <Link href="./booking">
-            <View style={styles.box}>
-              <Image
-                source={require("../../assets/matic.png")}
-                style={styles.boxImage}
-              />
-              <Text style={styles.boxText}>Matic</Text>
-            </View>
-          </Link>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.push("CreateBooking");
+          }}
+        >
+          <View style={styles.box}>
+            <Image
+              source={require("../../assets/matic.png")}
+              style={styles.boxImage}
+            />
+            <Text style={styles.boxText}>Matic</Text>
+          </View>
         </TouchableOpacity>
 
         {/* Manual */}
-        <TouchableOpacity onPress={() => console.log("Manual pressed")}>
-          <Link href="./booking">
-            <View style={styles.box}>
-              <Image
-                source={require("../../assets/manual.png")}
-                style={styles.boxImage}
-              />
-              <Text style={styles.boxText}>Manual</Text>
-            </View>
-          </Link>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.push("CreateBooking");
+          }}
+        >
+          <View style={styles.box}>
+            <Image
+              source={require("../../assets/manual.png")}
+              style={styles.boxImage}
+            />
+            <Text style={styles.boxText}>Manual</Text>
+          </View>
         </TouchableOpacity>
       </View>
       <NavigationBar page="home" />

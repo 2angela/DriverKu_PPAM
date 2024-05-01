@@ -6,11 +6,4 @@ export default function OrdersLayout() {
   if (!isLoggedIn) {
     return <Redirect href="/sign-in" />;
   }
-  return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    />
-  );
 }

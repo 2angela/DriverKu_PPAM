@@ -1,12 +1,11 @@
 import { Text, View, StyleSheet, FlatList } from "react-native";
-import { Link, router } from "expo-router";
 import firestore from "@react-native-firebase/firestore";
 import { useAuth } from "../../auth/AuthProvider";
 import { useEffect, useState } from "react";
-import { IconButton } from "react-native-paper";
+import { IconButton, Button } from "react-native-paper";
 import NavigationBar from "../components/navigationbar";
 
-export default function Orders() {
+export default function Orders({ navigation }) {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
 
@@ -38,13 +37,8 @@ export default function Orders() {
   }, []);
 
   const Item = ({ item }) => (
-    <View style={styles.card}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
+    <View>
+      <View style={styles.card}>
         <View
           style={{
             justifyContent: "space-between",
@@ -59,7 +53,7 @@ export default function Orders() {
         <View style={{ paddingHorizontal: 10 }}>
           <IconButton
             onPress={() => {
-              router.push("");
+              navigation.push("Orders");
             }}
             icon="message-reply-text"
             iconColor="#211951"
@@ -67,7 +61,7 @@ export default function Orders() {
           />
           <IconButton
             onPress={() => {
-              router.push("");
+              navigation.push("Orders");
             }}
             icon="star-settings-outline"
             iconColor="#211951"
@@ -75,12 +69,24 @@ export default function Orders() {
           />
         </View>
       </View>
+      <View style={{ width: 300 }}>
+        <Button
+          onPress={() => {
+            navigation.push("OrderDetails");
+          }}
+          mode="elevated"
+          icon="arrow-right"
+          style={styles.button}
+          labelStyle={styles.buttonText}
+        >
+          See Details
+        </Button>
+      </View>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <Link href={"./order/details"}>order details</Link>
       <Text style={styles.title}>Orders</Text>
       <FlatList
         data={orders}
@@ -101,17 +107,18 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
   list: {
-    flex: 3,
     width: "100%",
     paddingTop: 20,
   },
   card: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     backgroundColor: "#F0F3FF",
     borderColor: "black",
     borderWidth: 1,
-    borderRadius: 15,
-    marginVertical: 10,
-    width: 300,
+    borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,
+    marginTop: 10,
   },
   title: {
     fontSize: 32,
@@ -122,5 +129,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "MontserratExtraBold",
     paddingVertical: 5,
+  },
+  button: {
+    marginBottom: 20,
+    backgroundColor: "#211951",
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderBottomRightRadius: 15,
+    borderBottomLeftRadius: 15,
+    paddingHorizontal: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "MontserratBold",
   },
 });

@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import { useState } from "react";
 import {
   View,
@@ -9,16 +8,15 @@ import {
 } from "react-native";
 import { TextInput, HelperText, Button, IconButton } from "react-native-paper";
 import firestore from "@react-native-firebase/firestore";
-import { useAuth } from "../../auth/AuthProvider";
-import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../../auth/AuthProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import NavigationBar from "../components/navigationbar";
+import NavigationBar from "../../components/navigationbar";
 
-export default function BookingCreate() {
-  const navigation = useNavigation();
+export default function BookingCreate({ navigation }) {
   const [pickup, setPickup] = useState("");
   const [area, setArea] = useState("");
   const status = "Order Confirmed";
+  const driver = null;
   const { user } = useAuth();
 
   const [startDate, setStartDate] = useState(() => {
@@ -53,7 +51,6 @@ export default function BookingCreate() {
     startDate: "",
     endDate: "",
     duration: "",
-    status: "",
   });
 
   const validate = () => {
@@ -118,10 +115,11 @@ export default function BookingCreate() {
         endDate,
         duration,
         status,
+        driver,
         created_at: firestore.FieldValue.serverTimestamp(),
       });
-      router.push("/Home");
 
+      navigation.push("Home");
       setLoading(false);
     }
   };

@@ -4,7 +4,8 @@ import { Link, router, Redirect } from "expo-router";
 import { useAuth } from "../auth/AuthProvider";
 import { useState } from "react";
 import firestore from "@react-native-firebase/firestore";
-export default function SignUpScreen() {
+
+export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -18,7 +19,7 @@ export default function SignUpScreen() {
 
   const { signUp, user } = useAuth();
   if (user) {
-    return <Redirect href={"/Home"} />;
+    navigation.navigate("Home");
   }
 
   const validate = () => {
@@ -87,7 +88,7 @@ export default function SignUpScreen() {
               return null;
             });
 
-          router.replace("/Home");
+          navigation.navigate("Home");
         })
         .catch((error) => {
           let newErrors = {

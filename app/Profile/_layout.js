@@ -4,13 +4,7 @@ import { useAuth } from "../../auth/AuthProvider";
 export default function ProfileLayout() {
   const { isLoggedIn } = useAuth();
   if (!isLoggedIn) {
+    console.log("user not logged in");
     return <Redirect href="/sign-in" />;
   }
-  return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    />
-  );
 }

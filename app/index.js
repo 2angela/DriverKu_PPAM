@@ -1,7 +1,16 @@
-import React from "react";
-import { Text, TouchableOpacity, View, Image, StyleSheet } from "react-native";
-import { Link, Redirect } from "expo-router";
-import { useAuth } from "../auth/AuthProvider";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Landing from "./landing";
+import SignIn from "./sign-in";
+import SignUp from "./sign-up";
+import Home from "./Homepage/home";
+import CreateBooking from "./Homepage/booking/create";
+import BookingDetails from "./Homepage/booking/details";
+import Payment from "./Homepage/booking/payment";
+import Orders from "./Orders/history";
+import OrderActivity from "./Orders/order/activity";
+import OrderDetails from "./Orders/order/details";
+import Profile from "./Profile/profile";
 import {
   useFonts,
   Montserrat_500Medium,
@@ -9,6 +18,8 @@ import {
   Montserrat_800ExtraBold,
   Montserrat_600SemiBold,
 } from "@expo-google-fonts/montserrat";
+
+const Stack = createNativeStackNavigator();
 
 export default function Index() {
   const [fontsLoaded] = useFonts({
@@ -19,98 +30,31 @@ export default function Index() {
   });
 
   if (!fontsLoaded) {
+    console.log("Loading fonts...");
     return null; // Or a loading indicator
+  } else {
+    console.log("Fonts Loaded");
+    return (
+      <NavigationContainer independent={true}>
+        <Stack.Navigator
+          initialRouteName="Landing"
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Landing" component={Landing} />
+          <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="CreateBooking" component={CreateBooking} />
+          <Stack.Screen name="BookingDetails" component={BookingDetails} />
+          <Stack.Screen name="Payment" component={Payment} />
+          <Stack.Screen name="Orders" component={Orders} />
+          <Stack.Screen name="OrderActivity" component={OrderActivity} />
+          <Stack.Screen name="OrderDetails" component={OrderDetails} />
+          <Stack.Screen name="Profile" component={Profile} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
   }
-  const { user } = useAuth();
-
-  if (user) {
-    return <Redirect href={"/Home"} />;
-  }
-
-  const handleSignIn = () => {
-    // Handle button press
-  };
-
-  return (
-    <View style={styles.container}>
-      <Image source={require("../assets/driver.png")} style={styles.image} />
-      <View style={styles.content}>
-        <Text style={[styles.title, styles.titleSpacing]}>
-          Wherever You Go,
-        </Text>
-        <Text style={[styles.title, styles.titleSpacing]}>
-          Your Driver Follows:
-        </Text>
-        <Text style={[styles.title, styles.betweenSpacing]}>Book Now!</Text>
-        <Text style={[styles.description, styles.descriptionSpacing]}>
-          We provide the best drivers in
-        </Text>
-        <Text style={[styles.description, styles.descriptionSpacing]}>
-          town to guarantee your safety!
-        </Text>
-        {/* Button */}
-        <Link href="/sign-in" asChild>
-          <TouchableOpacity onPress={handleSignIn} style={styles.button}>
-            <Text style={styles.buttonText}>Sign In</Text>
-          </TouchableOpacity>
-        </Link>
-      </View>
-    </View>
-  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: "80%",
-    height: "40%",
-    resizeMode: "cover",
-    marginTop: 40,
-    marginBottom: 30,
-  },
-  content: {
-    marginTop: 10,
-    padding: 20,
-    backgroundColor: "#211951",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-  },
-  title: {
-    fontSize: 28,
-    fontFamily: "MontserratExtraBold",
-    color: "#15F5BA",
-  },
-  description: {
-    fontSize: 14,
-    fontFamily: "MontserratBold",
-    color: "white",
-  },
-  button: {
-    marginTop: 25,
-    padding: 10,
-    backgroundColor: "white",
-    borderRadius: 8,
-    alignItems: "center",
-    width: "40%",
-  },
-  buttonText: {
-    color: "#211951",
-    fontSize: 18,
-    fontFamily: "MontserratBold",
-  },
-  titleSpacing: {
-    marginBottom: 3,
-  },
-  descriptionSpacing: {
-    marginBottom: 3,
-  },
-  betweenSpacing: {
-    marginBottom: 30,
-  },
-});

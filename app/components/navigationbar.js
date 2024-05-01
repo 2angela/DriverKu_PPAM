@@ -1,10 +1,12 @@
 import { View, Text, StyleSheet } from "react-native";
 import { IconButton } from "react-native-paper";
 import { router } from "expo-router";
+import { useNavigation } from "expo-router";
 
 const NavigationBar = ({ page }) => {
   const defaultColor = "#211951";
   const highlight = "#836FFF";
+  const navigation = useNavigation();
 
   return (
     <View style={styles.dashboard}>
@@ -13,7 +15,7 @@ const NavigationBar = ({ page }) => {
           icon="home"
           iconColor={page == "home" ? highlight : defaultColor}
           size={30}
-          onPress={() => router.push("/Home")}
+          onPress={() => navigation.navigate("Home")}
           style={{ margin: 0, padding: 0 }}
         />
         <Text
@@ -30,7 +32,7 @@ const NavigationBar = ({ page }) => {
           icon="book"
           iconColor={page == "orders" ? highlight : defaultColor}
           size={30}
-          onPress={() => router.push("/Orders")}
+          onPress={() => navigation.navigate("Orders")}
           style={{ margin: 0, padding: 0 }}
         />
         <Text
@@ -47,7 +49,7 @@ const NavigationBar = ({ page }) => {
           icon="account"
           iconColor={page == "profile" ? highlight : defaultColor}
           size={30}
-          onPress={() => router.push("/Profile")}
+          onPress={() => navigation.navigate("Profile")}
           style={{ margin: 0, padding: 0 }}
         />
         <Text
