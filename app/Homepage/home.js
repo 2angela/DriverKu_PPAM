@@ -19,7 +19,7 @@ export default function Home({ navigation }) {
         {/* Matic */}
         <TouchableOpacity
           onPress={() => {
-            navigation.push("CreateBooking");
+            navigation.push("CreateBooking",{vehicle_types:"Matic"});
           }}
         >
           <View style={styles.box}>
@@ -34,7 +34,7 @@ export default function Home({ navigation }) {
         {/* Manual */}
         <TouchableOpacity
           onPress={() => {
-            navigation.push("CreateBooking");
+            navigation.push("CreateBooking",{vehicle_types:"Manual"});
           }}
         >
           <View style={styles.box}>

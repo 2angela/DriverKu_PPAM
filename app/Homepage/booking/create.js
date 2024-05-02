@@ -12,11 +12,12 @@ import { useAuth } from "../../../auth/AuthProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import NavigationBar from "../../components/navigationbar";
 
-export default function BookingCreate({ navigation }) {
+export default function BookingCreate({ navigation, route }) {
   const [pickup, setPickup] = useState("");
   const [area, setArea] = useState("");
   const status = "Order Confirmed";
   const driver = null;
+  const {vehicle_types} = route.params;
   const { user } = useAuth();
 
   const [startDate, setStartDate] = useState(() => {
@@ -116,6 +117,7 @@ export default function BookingCreate({ navigation }) {
         duration,
         status,
         driver,
+        vehicle_types,
         created_at: firestore.FieldValue.serverTimestamp(),
       });
 
