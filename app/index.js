@@ -11,6 +11,7 @@ import Orders from "./Orders/history";
 import OrderActivity from "./Orders/order/activity";
 import OrderDetails from "./Orders/order/details";
 import Profile from "./Profile/profile";
+import DriverAvailable from "./Homepage/booking/driveravailable";
 import {
   useFonts,
   Montserrat_500Medium,
@@ -18,6 +19,7 @@ import {
   Montserrat_800ExtraBold,
   Montserrat_600SemiBold,
 } from "@expo-google-fonts/montserrat";
+import DriverDetail from "./Homepage/booking/driver-detail";
 
 const Stack = createNativeStackNavigator();
 
@@ -46,6 +48,8 @@ export default function Index() {
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="DriverAvailable" component={DriverAvailable} />
+          <Stack.Screen name="DriverDetail" component={DriverDetail} />
           <Stack.Screen name="CreateBooking" component={CreateBooking} />
           <Stack.Screen name="BookingDetails" component={BookingDetails} />
           <Stack.Screen name="Payment" component={Payment} />

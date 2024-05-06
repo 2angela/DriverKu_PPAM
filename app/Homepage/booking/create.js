@@ -15,10 +15,16 @@ import NavigationBar from "../../components/navigationbar";
 export default function BookingCreate({ navigation, route }) {
   const [pickup, setPickup] = useState("");
   const [area, setArea] = useState("");
-  const status = "Order Confirmed";
+  const status = "Unpaid";
   const driver = null;
   const {vehicle_types} = route.params;
   const { user } = useAuth();
+
+  const [startTime, setStartTime] = useState(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
 
   const [startDate, setStartDate] = useState(() => {
     const date = new Date();
@@ -26,22 +32,40 @@ export default function BookingCreate({ navigation, route }) {
     return date;
   });
 
+  const [endTime, setEndTime] = useState(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
   const [endDate, setEndDate] = useState(() => {
     const date = new Date();
     date.setHours(0, 0, 0, 0);
     return date;
   });
+
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
   const handleStartDateChange = (event, date) => {
     setShowStartDatePicker(false);
     setStartDate(date || startDate);
   };
 
+  const handleStartTimeChange = (event, date) => {
+    setShowStartTimePicker(false);
+    setStartTime(date || startTime);
+  };
+
   const handleEndDateChange = (event, date) => {
     setShowEndDatePicker(false);
     setEndDate(date || endDate);
+  };
+
+  const handleEndTimeChange = (event, date) => {
+    setShowEndTimePicker(false);
+    setEndTime(date || endTime);
   };
 
   const [duration, setDuration] = useState("");
@@ -50,7 +74,9 @@ export default function BookingCreate({ navigation, route }) {
     pickup: "",
     area: "",
     startDate: "",
+    startTime : "",
     endDate: "",
+    endTime : "",
     duration: "",
   });
 
@@ -59,7 +85,9 @@ export default function BookingCreate({ navigation, route }) {
       pickup: "",
       area: "",
       startDate: "",
+      startTime : "",
       endDate: "",
+      endTime : "",
       duration: "",
     };
 
@@ -79,10 +107,20 @@ export default function BookingCreate({ navigation, route }) {
       newErrors.startDate = "Start Date is Required";
     }
 
+    if (!startTime) {
+      newErrors.startTime = "Start Time is Required";
+    }
+
     if (!endDate) {
       newErrors.endDate = "End Date is Required";
     } else if (endDate < startDate) {
       newErrors.endDate = "End Date cannot be before Start Date";
+    }
+
+    if (!endTime) {
+      newErrors.endTime = "End Time is Required";
+    } else if (endTime < startTime) {
+      newErrors.endDate = "End Time cannot be before Start Time";
     }
 
     if (!duration) {
@@ -100,29 +138,41 @@ export default function BookingCreate({ navigation, route }) {
     const findErrors = validate();
 
     if (Object.values(findErrors).some((value) => value !== "")) {
-      console.log(findErrors);
       setErrors(findErrors);
+
     } else {
-      setLoading(true);
-      const bookingColRef = firestore()
-        .collection("Customer")
-        .doc(user?.uid)
-        .collection("Order");
+      // const bookingColRef = firestore()
+      //   .collection("Customer")
+      //   .doc(user?.uid)
+      //   .collection("Order");
 
-      await bookingColRef.add({
-        pickup,
-        area,
-        startDate,
-        endDate,
-        duration,
-        status,
-        driver,
-        vehicle_types,
-        created_at: firestore.FieldValue.serverTimestamp(),
+      // await bookingColRef.add({
+      //   pickup,
+      //   area,
+      //   startDate,
+      //   endDate,
+      //   duration,
+      //   status,
+      //   driver,
+      //   vehicle_types,
+      //   created_at: firestore.FieldValue.serverTimestamp(),
+      // });
+
+      navigation.push("DriverAvailable", {
+        location      : area,
+        vehicle_types : vehicle_types,
+        dataBooking   : {
+          pickup,
+          area,
+          startTime,
+          startDate,
+          endTime,
+          endDate,
+          duration,
+          status,
+          vehicle_types
+        }
       });
-
-      navigation.push("Home");
-      setLoading(false);
     }
   };
 
@@ -176,23 +226,43 @@ export default function BookingCreate({ navigation, route }) {
             </HelperText>
 
             {/* Start Date Picker */}
-            <TextInput
-              label={<Text style={styles.label}>Start Date</Text>}
-              value={startDate.toDateString()}
-              onTouchStart={() => setShowStartDatePicker(true)}
-            />
-            {showStartDatePicker && (
-              <DateTimePicker
-                value={startDate}
-                mode="date"
-                display="spinner"
-                onChange={handleStartDateChange}
+            <View style={styles.enddatefieldContainer}>
+              <TextInput
+                style={{ flex:1, marginBottom:5 }}
+                label={<Text style={styles.label}>Start Date</Text>}
+                value={startDate.toDateString()}
+                onTouchStart={() => setShowStartDatePicker(true)}
               />
-            )}
+              {showStartDatePicker && (
+                <DateTimePicker
+                  value={startDate}
+                  mode="datetime"
+                  display="spinner"
+                  onChange={handleStartDateChange}
+                />
+              )}
+
+              <TextInput
+                style={{ flex:1 }}
+                label={<Text style={styles.label}>Start Time</Text>}
+                value={startTime.toTimeString()}
+                onTouchStart={() => setShowStartTimePicker(true)}
+              />
+              {showStartTimePicker && (
+                <DateTimePicker
+                  value={startTime}
+                  mode="time"
+                  is24Hour={true}
+                  display="spinner"
+                  onChange={handleStartTimeChange}
+                />
+              )}
+            </View>
 
             {/* End Date Picker */}
             <View style={styles.enddatefieldContainer}>
               <TextInput
+                style={{ flex:1, marginBottom:5 }}
                 label={<Text style={styles.label}>End Date</Text>}
                 value={endDate.toDateString()}
                 onTouchStart={() => setShowEndDatePicker(true)}
@@ -200,9 +270,25 @@ export default function BookingCreate({ navigation, route }) {
               {showEndDatePicker && (
                 <DateTimePicker
                   value={endDate}
-                  mode="date"
+                  mode="datetime"
                   display="spinner"
                   onChange={handleEndDateChange}
+                />
+              )}
+
+              <TextInput
+                style={{ flex:1 }}
+                label={<Text style={styles.label}>End Time</Text>}
+                value={endTime.toTimeString()}
+                onTouchStart={() => setShowEndTimePicker(true)}
+              />
+              {showEndTimePicker && (
+                <DateTimePicker
+                  value={endTime}
+                  mode="time"
+                  is24Hour={true}
+                  display="spinner"
+                  onChange={handleEndTimeChange}
                 />
               )}
             </View>
@@ -215,6 +301,7 @@ export default function BookingCreate({ navigation, route }) {
                   color="#F0F3FF"
                 />
               }
+              style={{ marginTop:20 }}
               label={<Text style={styles.label}>Duration per Day</Text>}
               disabled={loading}
               value={duration}
@@ -327,7 +414,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   enddatefieldContainer: {
-    marginBottom: 20,
-    marginTop: 20,
+    marginBottom: 10,
+    marginTop: 10
   },
 });
