@@ -61,7 +61,7 @@ export default function Orders({ navigation }) {
           />
           <IconButton
             onPress={() => {
-              navigation.push("Orders");
+              navigation.push("Review");
             }}
             icon="star-settings-outline"
             iconColor="#211951"

@@ -12,6 +12,7 @@ import OrderActivity from "./Orders/order/activity";
 import OrderDetails from "./Orders/order/details";
 import Profile from "./Profile/profile";
 import DriverAvailable from "./Homepage/booking/driveravailable";
+import Review from "./Orders/review";
 import {
   useFonts,
   Montserrat_500Medium,
@@ -54,6 +55,7 @@ export default function Index() {
           <Stack.Screen name="BookingDetails" component={BookingDetails} />
           <Stack.Screen name="Payment" component={Payment} />
           <Stack.Screen name="Orders" component={Orders} />
+          <Stack.Screen name="Review" component={Review} />
           <Stack.Screen name="OrderActivity" component={OrderActivity} />
           <Stack.Screen name="OrderDetails" component={OrderDetails} />
           <Stack.Screen name="Profile" component={Profile} />

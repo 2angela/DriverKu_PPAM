@@ -39,7 +39,7 @@ export default function Profile({ navigation }) {
       <Text style={styles.title}>Profile</Text>
       <Image
         source={require("../../assets/profile.png")}
-        style={{ width: "30%", height: "16%", marginVertical: 20 }}
+        style={styles.image}
       />
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.contents}>{email}</Text>
@@ -68,6 +68,11 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: "MontserratExtraBold",
     paddingVertical: 5,
+  },
+  image: {
+    width: "30%",
+    height: "16%",
+    marginVertical: 20,
   },
   name: {
     fontSize: 20,
