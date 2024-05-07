@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     width: "80%",
     height: "100%",
     marginBottom: 50,
-    flexDirection: row,
+    flexDirection: "row",
     justifyContent: "space-between",
   },
 });

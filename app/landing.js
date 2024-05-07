@@ -1,17 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, TouchableOpacity, View, Image, StyleSheet } from "react-native";
 import { useAuth } from "../auth/AuthProvider";
 
 export default function Landing({ navigation }) {
   const { user } = useAuth();
 
-  if (user) {
-    navigation.push("Home");
-  }
-
-  const handleSignIn = () => {
-    navigation.push("SignIn");
-  };
+  useEffect(() => {
+    if (user) {
+      navigation.push("Home");
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -30,7 +28,10 @@ export default function Landing({ navigation }) {
         <Text style={[styles.description, styles.descriptionSpacing]}>
           town to guarantee your safety!
         </Text>
-        <TouchableOpacity onPress={handleSignIn} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => navigation.push("SignIn")}
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
       </View>

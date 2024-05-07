@@ -4,6 +4,7 @@ import StarRating from "react-native-star-rating-widget";
 
 export default function Review({ navigation, route }) {
   const [rating, setRating] = useState();
+  const { driverID } = route.params;
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Rating and Review</Text>

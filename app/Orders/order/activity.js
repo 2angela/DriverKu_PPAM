@@ -10,6 +10,21 @@ import { Icon } from "react-native-paper";
 
 export default function OrderActivity({ navigation, route }) {
   const { orderID } = route.params;
+  const randomAddress = [
+    "Jalan Apel No. 111, Bandung",
+    "Institut Teknologi Bandung",
+    "23 Paskal Shopping Center",
+    "Jalan Mawar No.22, Bandung",
+    "Jalan Merdeka No. 39, Bandung",
+    "Jalan Diponegoro No. 90, Bandung",
+    "Lobby Bandung Indah Plaza",
+    "Jalan Supratman No. 3 Blok C, Bandung",
+    "Universitas Padjajaran",
+    "Jalan Tubagus Ismail No. 72, Bandung",
+    "Mall BEC",
+    "Jalan Plesiran No. 52, Bandung",
+    "Hotel Four Points",
+  ];
   return (
     <ScrollView style={styles.container}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
