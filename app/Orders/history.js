@@ -72,7 +72,7 @@ export default function Orders({ navigation }) {
       <View style={{ width: 300 }}>
         <Button
           onPress={() => {
-            navigation.push("OrderDetails");
+            navigation.push("OrderDetails", { orderID: item.id });
           }}
           mode="elevated"
           icon="arrow-right"

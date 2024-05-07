@@ -19,7 +19,7 @@ export default function SignUpScreen({ navigation }) {
 
   const { signUp, user } = useAuth();
   if (user) {
-    navigation.navigate("Home");
+    navigation.push("Home");
   }
 
   const validate = () => {
@@ -88,7 +88,7 @@ export default function SignUpScreen({ navigation }) {
               return null;
             });
 
-          navigation.navigate("Home");
+          navigation.push("Home");
         })
         .catch((error) => {
           let newErrors = {
