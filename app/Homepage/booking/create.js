@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { TextInput, HelperText, Button, IconButton } from "react-native-paper";
 import firestore from "@react-native-firebase/firestore";
 import { useAuth } from "../../../auth/AuthProvider";
@@ -17,7 +11,7 @@ export default function BookingCreate({ navigation, route }) {
   const [area, setArea] = useState("");
   const status = "Unpaid";
   const driver = null;
-  const {vehicle_types} = route.params;
+  const { vehicle_types } = route.params;
   const { user } = useAuth();
 
   const [startTime, setStartTime] = useState(() => {
@@ -74,9 +68,9 @@ export default function BookingCreate({ navigation, route }) {
     pickup: "",
     area: "",
     startDate: "",
-    startTime : "",
+    startTime: "",
     endDate: "",
-    endTime : "",
+    endTime: "",
     duration: "",
   });
 
@@ -85,9 +79,9 @@ export default function BookingCreate({ navigation, route }) {
       pickup: "",
       area: "",
       startDate: "",
-      startTime : "",
+      startTime: "",
       endDate: "",
-      endTime : "",
+      endTime: "",
       duration: "",
     };
 
@@ -99,7 +93,7 @@ export default function BookingCreate({ navigation, route }) {
 
     if (!area.trim()) {
       newErrors.area = "Driving Area is Required";
-    } else if (area.length < 1) {
+    } else if (area.length < 4) {
       newErrors.description = "Area name must be at least 12 characters";
     }
 
@@ -139,7 +133,6 @@ export default function BookingCreate({ navigation, route }) {
 
     if (Object.values(findErrors).some((value) => value !== "")) {
       setErrors(findErrors);
-
     } else {
       // const bookingColRef = firestore()
       //   .collection("Customer")
@@ -159,9 +152,9 @@ export default function BookingCreate({ navigation, route }) {
       // });
 
       navigation.push("DriverAvailable", {
-        location      : area,
-        vehicle_types : vehicle_types,
-        dataBooking   : {
+        location: area,
+        vehicle_types: vehicle_types,
+        dataBooking: {
           pickup,
           area,
           startTime,
@@ -170,8 +163,8 @@ export default function BookingCreate({ navigation, route }) {
           endDate,
           duration,
           status,
-          vehicle_types
-        }
+          vehicle_types,
+        },
       });
     }
   };
@@ -181,9 +174,13 @@ export default function BookingCreate({ navigation, route }) {
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <IconButton icon="arrow-left" size={24} iconColor="#211951" />
-            </TouchableOpacity>
+            <IconButton
+              onPress={() => navigation.goBack()}
+              icon="arrow-left"
+              size={24}
+              iconColor="#211951"
+              style={{ alignSelf: "flex-start", marginLeft: 15 }}
+            />
           </View>
           <View style={styles.textRow}>
             <Text style={styles.title}>Book Drivers</Text>
@@ -228,7 +225,7 @@ export default function BookingCreate({ navigation, route }) {
             {/* Start Date Picker */}
             <View style={styles.enddatefieldContainer}>
               <TextInput
-                style={{ flex:1, marginBottom:5 }}
+                style={{ flex: 1, marginBottom: 5 }}
                 label={<Text style={styles.label}>Start Date</Text>}
                 value={startDate.toDateString()}
                 onTouchStart={() => setShowStartDatePicker(true)}
@@ -243,7 +240,7 @@ export default function BookingCreate({ navigation, route }) {
               )}
 
               <TextInput
-                style={{ flex:1 }}
+                style={{ flex: 1 }}
                 label={<Text style={styles.label}>Start Time</Text>}
                 value={startTime.toTimeString()}
                 onTouchStart={() => setShowStartTimePicker(true)}
@@ -262,7 +259,7 @@ export default function BookingCreate({ navigation, route }) {
             {/* End Date Picker */}
             <View style={styles.enddatefieldContainer}>
               <TextInput
-                style={{ flex:1, marginBottom:5 }}
+                style={{ flex: 1, marginBottom: 5 }}
                 label={<Text style={styles.label}>End Date</Text>}
                 value={endDate.toDateString()}
                 onTouchStart={() => setShowEndDatePicker(true)}
@@ -277,7 +274,7 @@ export default function BookingCreate({ navigation, route }) {
               )}
 
               <TextInput
-                style={{ flex:1 }}
+                style={{ flex: 1 }}
                 label={<Text style={styles.label}>End Time</Text>}
                 value={endTime.toTimeString()}
                 onTouchStart={() => setShowEndTimePicker(true)}
@@ -301,7 +298,7 @@ export default function BookingCreate({ navigation, route }) {
                   color="#F0F3FF"
                 />
               }
-              style={{ marginTop:20 }}
+              style={{ marginTop: 20 }}
               label={<Text style={styles.label}>Duration per Day</Text>}
               disabled={loading}
               value={duration}
@@ -415,6 +412,6 @@ const styles = StyleSheet.create({
   },
   enddatefieldContainer: {
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 10,
   },
 });

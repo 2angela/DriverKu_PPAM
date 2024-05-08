@@ -1,8 +1,8 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { TextInput, Button, Title, HelperText } from "react-native-paper";
-import { Link, router, Redirect } from "expo-router";
+import { TextInput, Title, HelperText } from "react-native-paper";
+import { Link } from "expo-router";
 import { useAuth } from "../auth/AuthProvider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function SignInScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -12,9 +12,11 @@ export default function SignInScreen({ navigation }) {
     password: "",
   });
   const { signIn, user } = useAuth();
-  if (user) {
-    navigation.navigate("Home");
-  }
+  useEffect(() => {
+    if (user) {
+      navigation.push("Home");
+    }
+  }, []);
 
   const validate = () => {
     let newErrors = {

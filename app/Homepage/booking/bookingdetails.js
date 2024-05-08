@@ -65,6 +65,7 @@ export default function BookingDetails({ navigation, route }) {
         driverID: driverId,
         vehicle_types: dataBooking.vehicle_types,
         payment_method: activePaymentMethod,
+        reviewed: false,
         created_at: firestore.FieldValue.serverTimestamp(),
       });
 

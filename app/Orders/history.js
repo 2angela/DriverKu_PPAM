@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList } from "react-native";
+import { Text, View, StyleSheet, FlatList, Alert } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 import { useAuth } from "../../auth/AuthProvider";
 import { useEffect, useState } from "react";
@@ -9,6 +9,10 @@ export default function Orders({ navigation }) {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
 
+  const handleButton = (order) => {
+    if (order.driver == "Unassigned") {
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -23,6 +27,7 @@ export default function Orders({ navigation }) {
           driver: doc.data().driver == null ? "Unassigned" : doc.data().driver,
           created_at: doc.data().created_at.toDate().toDateString(),
           status: doc.data().status,
+          reviewed: doc.data().reviewed,
         }));
 
         setOrders(data);
@@ -61,9 +66,14 @@ export default function Orders({ navigation }) {
           />
           <IconButton
             onPress={() => {
-              navigation.push("Review");
+              {
+                item.reviewed
+                  ? null
+                  : navigation.push("Review", { orderID: item.id });
+              }
             }}
-            icon="star-settings-outline"
+            disabled={item.driver == "Unassigned"}
+            icon={item.reviewed ? "star-check" : "star-settings-outline"}
             iconColor="#211951"
             size={30}
           />
@@ -82,6 +92,13 @@ export default function Orders({ navigation }) {
           See Details
         </Button>
       </View>
+      <Button
+        onPress={() => {
+          navigation.push("OrderActivity", { orderID: item.id });
+        }}
+      >
+        Activites
+      </Button>
     </View>
   );
 
@@ -105,6 +122,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "start",
     paddingTop: 60,
+    paddingBottom: 70,
   },
   list: {
     width: "100%",

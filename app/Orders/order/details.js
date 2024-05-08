@@ -1,12 +1,6 @@
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
+import firestore from "@react-native-firebase/firestore";
 import NavigationBar from "../../components/navigationbar";
 import { useAuth } from "../../../auth/AuthProvider";
 import { Button, IconButton } from "react-native-paper";
@@ -38,7 +32,7 @@ export default function OrderDetails({ navigation, route }) {
   };
 
   useEffect(() => {
-    const fetchOrder = async () => {
+    const fetchData = async () => {
       try {
         const querySnapshot = await firestore()
           .collection("Customer")
@@ -49,8 +43,8 @@ export default function OrderDetails({ navigation, route }) {
         const data = querySnapshot.data();
         const orderData = {
           driverID: data.driverID,
-          driverName:
-            data.driverID == null ? "" : await fetchDriver(orderData.driverID),
+          driverName: data.driver,
+          // data.driver == null ? "" : await fetchDriver(orderData.driverID),
           date:
             data.created_at == null
               ? "Error, Order has no Date"
@@ -59,8 +53,8 @@ export default function OrderDetails({ navigation, route }) {
           pickupLocation: data.pickup,
           pickupTime: getTime(doc.data().startDate),
           total: doc.data().total,
-          payMethod: doc.data().paymethod,
-          payStatus: doc.data().payStatus,
+          payMethod: doc.data().payment_method,
+          payStatus: doc.data().payment_status,
           orderStatus: doc.data().status,
           orderID: route.params,
         };
@@ -72,27 +66,31 @@ export default function OrderDetails({ navigation, route }) {
         console.log("Data:", data);
       }
     };
-    const fetchDriver = async () => {
-      try {
-        const querySnapshot = await firestore()
-          .collection("Driver")
-          .doc(details.driverID)
-          .get();
-        const data = querySnapshot.data().name;
-        return data;
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        console.log("Data:", data);
-      }
-    };
+    // const fetchDriver = async () => {
+    //   try {
+    //     const querySnapshot = await firestore()
+    //       .collection("Driver")
+    //       .doc(details.driverID)
+    //       .get();
+    //     const data = querySnapshot.data().name;
+    //     return data;
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //     console.log("Data:", data);
+    //   }
+    // };
 
-    fetchOrder();
+    fetchData();
   }, []);
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <IconButton icon="arrow-left" size={24} iconColor="#211951" />
-      </TouchableOpacity>
+      <IconButton
+        onPress={() => navigation.goBack()}
+        icon="arrow-left"
+        size={24}
+        iconColor="#211951"
+        style={{ alignSelf: "flex-start", marginLeft: 15 }}
+      />
       <Text style={styles.title}>Order Details</Text>
       <Image
         source={require("../../../assets/orderdetails.png")}
