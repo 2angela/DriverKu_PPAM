@@ -52,6 +52,22 @@ const DriverDetail = ({ navigation, route }) => {
         setDataReview(data)
     }
 
+    const sensorNama = (nama) => {
+        if(nama !== "" && nama !== undefined) {
+            const karakter = nama.split('');
+    
+            if (karakter.length < 4) {
+                return nama;
+            }
+    
+            for (let i = 1; i < karakter.length - 1; i++) {
+                karakter[i] = '*';
+            }
+    
+            return karakter.join('');
+        }
+    };
+
     useFocusEffect(
         useCallback(() => {
             const fetchData = async () => {
@@ -149,7 +165,7 @@ const DriverDetail = ({ navigation, route }) => {
                                                                             <Image source={require("../../../assets/profile.png")} style={{ width:20, height:20 }}/>
                                                                         </View>
                                                                         <View style={{ flex:1, paddingHorizontal:10 }}>
-                                                                            <Text style={{ fontFamily:"MontserratBold" }}>{e.customer}</Text>
+                                                                            <Text style={{ fontFamily:"MontserratBold" }}>{sensorNama(e.customer)}</Text>
                                                                         </View>
                                                                         <View style={{ flexDirection:"row", alignItems:"center" }}>
                                                                             <View>
