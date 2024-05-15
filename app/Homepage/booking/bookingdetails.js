@@ -51,7 +51,7 @@ export default function BookingDetails({ navigation, route }) {
         .doc(user?.uid)
         .collection("Order");
 
-      await bookingColRef.add({
+      const booking = await bookingColRef.add({
         order_id: idOrder,
         pickup: dataBooking.pickup,
         area: dataBooking.area,
@@ -60,16 +60,21 @@ export default function BookingDetails({ navigation, route }) {
         endDate: dataBooking.endDate,
         endTime: dataBooking.endTime,
         duration: dataBooking.duration,
-        status: "Order Confirmed",
+        status: "unpaid",
         driver: driverName,
         driverID: driverId,
         vehicle_types: dataBooking.vehicle_types,
+        totalAmount: totalAmount,
         payment_method: activePaymentMethod,
         reviewed: false,
         created_at: firestore.FieldValue.serverTimestamp(),
       });
 
-      navigation.navigate("Orders");
+      navigation.navigate("Payment", {
+        booking_id : booking.id,
+        totalPrice : totalAmount
+      })
+      
     } catch (error) {
       console.log("err => ", error);
       ToastAndroid.show("Failed create booking !", ToastAndroid.SHORT);

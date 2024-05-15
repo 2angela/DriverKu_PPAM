@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import { useFocusEffect } from "expo-router";
 import firestore from "@react-native-firebase/firestore";
 import { Button } from "react-native-paper";
+import moment from "moment-timezone";
 import NavigationBar from "../../components/navigationbar";
 
 const DriverDetail = ({ navigation, route }) => {
@@ -12,10 +13,15 @@ const DriverDetail = ({ navigation, route }) => {
     const [activeTab, setActiveTab]   = useState(0)
 
     const orderBooking = () => {
+        const startDate = moment(dataBooking.startDate, 'YYYY-MM-DD');
+        const endDate   = moment(dataBooking.endDate, 'YYYY-MM-DD');
+        const duration  = moment.duration(endDate.diff(startDate));
+        const days      = duration.asDays();
+        
         navigation.navigate("BookingDetails", {
             dataBooking : dataBooking,
             driverName  : dataDriver.name,
-            totalAmount : parseInt(dataDriver.rate)*parseInt(dataBooking.duration),
+            totalAmount : (parseInt(dataDriver.rate)*parseInt(dataBooking.duration))*days,
             driverId    : `Driver/${idDriver}`
         })
     }

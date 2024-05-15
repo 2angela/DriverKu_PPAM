@@ -1,35 +1,15 @@
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import firestore from "@react-native-firebase/firestore";
 import NavigationBar from "../../components/navigationbar";
 import { useAuth } from "../../../auth/AuthProvider";
 import { Button, IconButton } from "react-native-paper";
+import moment from "moment-timezone";
 
 export default function OrderDetails({ navigation, route }) {
-  const { user } = useAuth();
-  // const { orderID } = route.params;
-  const [details, setdetails] = useState({
-    driverID,
-    driverName,
-    date,
-    duration,
-    pickupLocation,
-    pickupTime,
-    total,
-    payMethod,
-    payStatus,
-    orderStatus,
-    orderID,
-  });
-
-  const getTime = (date) => {
-    if (date) {
-      const hour = date.getHours();
-      const minute = date.getMinutes();
-      return hour.toString() + ":" + minute.toString();
-    }
-    return null;
-  };
+  const { user }             = useAuth();
+  const [details, setDetail] = useState({})
+  const { orderID }          = route.params;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,45 +20,32 @@ export default function OrderDetails({ navigation, route }) {
           .collection("Order")
           .doc(orderID)
           .get();
+
         const data = querySnapshot.data();
         const orderData = {
           driverID: data.driverID,
           driverName: data.driver,
-          // data.driver == null ? "" : await fetchDriver(orderData.driverID),
           date:
             data.created_at == null
               ? "Error, Order has no Date"
               : data.created_at.toDate().toDateString(),
           duration: data.duration,
           pickupLocation: data.pickup,
-          pickupTime: getTime(doc.data().startDate),
-          total: doc.data().total,
-          payMethod: doc.data().payment_method,
-          payStatus: doc.data().payment_status,
-          orderStatus: doc.data().status,
-          orderID: route.params,
+          pickupTime: moment(data.startDate).format("HH : mm"),
+          total: data.totalAmount,
+          payMethod: data.payment_method,
+          payStatus: data.status,
+          orderStatus: data.status,
+          orderID: orderID,
+          order_id : data.order_id
         };
 
-        setdetails(orderData);
-        console.log("Data:", data);
+        setDetail(orderData);
       } catch (error) {
         console.error("Error fetching data:", error);
         console.log("Data:", data);
       }
     };
-    // const fetchDriver = async () => {
-    //   try {
-    //     const querySnapshot = await firestore()
-    //       .collection("Driver")
-    //       .doc(details.driverID)
-    //       .get();
-    //     const data = querySnapshot.data().name;
-    //     return data;
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //     console.log("Data:", data);
-    //   }
-    // };
 
     fetchData();
   }, []);
@@ -96,35 +63,124 @@ export default function OrderDetails({ navigation, route }) {
         source={require("../../../assets/orderdetails.png")}
         style={styles.image}
       />
-      <Text style={styles.name}>{details.driverName}</Text>
-      <Text style={styles.contents}>{details.date}</Text>
-      <Text style={styles.contents}>{details.duration}</Text>
-      <View style={styles.box}>
-        <View style={styles.contents}>
-          <Text>Pickup Location</Text>
-          <Text>Pickup Time</Text>
-          <Text>Total Payment</Text>
-          <Text>Payment Method</Text>
-          <Text>Payment Status</Text>
-          <Text>Order Status</Text>
-          <Text>Order ID</Text>
-        </View>
-        <View style={[styles.contents, styles.contentsEnd]}>
-          <Text>{details.pickupLocation}</Text>
-          <Text>{details.pickupTime}</Text>
-          <Text>{details.total}</Text>
-          <Text>{details.payMethod}</Text>
-          <Text>{details.payStatus}</Text>
-          <Text>{details.orderStatus}</Text>
-          <Text>{details.orderID}</Text>
-        </View>
-        <Button
-          style={styles.button}
-          onPress={navigation.push(OrderActivity, { orderID: details.orderID })}
-        >
-          See Activites
-        </Button>
-      </View>
+
+      {
+        Object.keys(details).length > 0 &&
+        <Fragment>
+          <View style={{ marginVertical:10 }}>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ fontSize:20, fontWeight:700 }}>{details.driverName}</Text>
+            </View>
+            <View style={{ alignItems: "center", marginVertical:2 }}>
+              <Text style={{ fontWeight:500 }}>{moment(details.date).format("dddd, DD MMM YYYY")}</Text>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ fontWeight:400 }}>{details.duration} Hours</Text>
+            </View>
+          </View>
+          
+          <View style={styles.boxContainer}>
+            <ScrollView>
+              <View style={{ borderWidth:1, borderColor:"#6b6881", borderRadius:10, paddingHorizontal:20, paddingTop:20, paddingBottom:20, backgroundColor:"#f0f2fe" }}>
+                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
+                    <View style={{ flex:1 }}>
+                      <Text style={styles.textDetail}>
+                        Pickup Location
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textDetailBody}>
+                        {details.pickupLocation}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
+                    <View style={{ flex:1 }}>
+                      <Text style={styles.textDetail}>
+                        Pickup Time
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textDetailBody}>
+                        {details.pickupTime}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
+                    <View style={{ flex:1 }}>
+                      <Text style={styles.textDetail}>
+                        Total Amount
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textDetailBody}>
+                        Rp {details.total.toLocaleString("id-ID")}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
+                    <View style={{ flex:1 }}>
+                      <Text style={styles.textDetail}>
+                        Payment Method
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textDetailBody}>
+                        {details.payMethod}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
+                    <View style={{ flex:1 }}>
+                      <Text style={styles.textDetail}>
+                        Payment Status
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textDetailBody}>
+                        {details.payStatus}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
+                    <View style={{ flex:1 }}>
+                      <Text style={styles.textDetail}>
+                        Order Status
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textDetailBody}>
+                        {details.payStatus}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
+                    <View style={{ flex:1 }}>
+                      <Text style={styles.textDetail}>
+                        Order ID
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textDetailBody}>
+                        {details.order_id}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ marginTop:10 }}>
+                    <Button
+                      style={styles.button}
+                      onPress={() => navigation.push("OrderActivity", { orderID: details.orderID })}
+                    >
+                      <Text style={{ color:"white" }}>
+                        See Activites
+                      </Text>
+                    </Button>
+                  </View>
+                </View>
+            </ScrollView>
+          </View>
+        </Fragment>
+      }
       <NavigationBar />
     </ScrollView>
   );
@@ -184,4 +240,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  boxContainer: {
+		flexDirection: "row",
+		justifyContent: "space-around",
+		width: "100%",
+		paddingHorizontal: 20,
+		marginTop: 10,
+	},
 });

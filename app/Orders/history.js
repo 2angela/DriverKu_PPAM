@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList, Alert } from "react-native";
+import { Text, View, StyleSheet, FlatList } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 import { useAuth } from "../../auth/AuthProvider";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ export default function Orders({ navigation }) {
     if (order.driver == "Unassigned") {
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,12 +23,14 @@ export default function Orders({ navigation }) {
           .collection("Order")
           .orderBy("created_at")
           .get();
+          
         const data = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           driver: doc.data().driver == null ? "Unassigned" : doc.data().driver,
           created_at: doc.data().created_at.toDate().toDateString(),
           status: doc.data().status,
           reviewed: doc.data().reviewed,
+          totalAmount : doc.data().totalAmount
         }));
 
         setOrders(data);
@@ -41,66 +44,74 @@ export default function Orders({ navigation }) {
     fetchData();
   }, []);
 
-  const Item = ({ item }) => (
-    <View>
-      <View style={styles.card}>
-        <View
-          style={{
-            justifyContent: "space-between",
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-          }}
-        >
-          <Text style={styles.contents}>Driver: {item.driver}</Text>
-          <Text style={styles.contents}>{item.created_at}</Text>
-          <Text style={styles.contents}>{item.status}</Text>
-        </View>
-        <View style={{ paddingHorizontal: 10 }}>
-          <IconButton
-            onPress={() => {
-              navigation.push("Orders");
+  const Item = ({ item }) => {
+    return (
+      <View>
+        <View style={styles.card}>
+          <View
+            style={{
+              justifyContent: "space-between",
+              paddingHorizontal: 20,
+              paddingVertical: 10,
             }}
-            icon="message-reply-text"
-            iconColor="#211951"
-            size={30}
-          />
-          <IconButton
-            onPress={() => {
-              {
-                item.reviewed
-                  ? null
-                  : navigation.push("Review", { orderID: item.id });
-              }
-            }}
-            disabled={item.driver == "Unassigned"}
-            icon={item.reviewed ? "star-check" : "star-settings-outline"}
-            iconColor="#211951"
-            size={30}
-          />
+          >
+            <Text style={styles.contents}>Driver: {item.driver}</Text>
+            <Text style={styles.contents}>{item.created_at}</Text>
+            <Text style={styles.contents}>{item.status}</Text>
+          </View>
+          <View style={{ paddingHorizontal: 10 }}>
+            <IconButton
+              onPress={() => {
+                navigation.push("Orders");
+              }}
+              icon="message-reply-text"
+              iconColor="#211951"
+              size={30}
+            />
+            <IconButton
+              onPress={() => {
+                {
+                  item.reviewed
+                    ? null
+                    : navigation.push("Review", { orderID: item.id });
+                }
+              }}
+              disabled={item.driver == "Unassigned"}
+              icon={item.reviewed ? "star-check" : "star-settings-outline"}
+              iconColor="#211951"
+              size={30}
+            />
+          </View>
         </View>
-      </View>
-      <View style={{ width: 300 }}>
+        <View style={{ width: 300 }}>
+          <Button
+            onPress={() => {
+              item.status === "unpaid" ?
+                navigation.navigate("Payment", {
+                  booking_id : item.id,
+                  totalPrice : item.totalAmount !== undefined ? item.totalAmount : 0
+                })
+              :
+                navigation.push("OrderDetails", { orderID: item.id });
+            }}
+            mode="elevated"
+            icon="arrow-right"
+            style={styles.button}
+            labelStyle={styles.buttonText}
+          >
+            See Details
+          </Button>
+        </View>
         <Button
           onPress={() => {
-            navigation.push("OrderDetails", { orderID: item.id });
+            navigation.push("OrderActivity", { orderID: item.id });
           }}
-          mode="elevated"
-          icon="arrow-right"
-          style={styles.button}
-          labelStyle={styles.buttonText}
         >
-          See Details
+          Activites
         </Button>
       </View>
-      <Button
-        onPress={() => {
-          navigation.push("OrderActivity", { orderID: item.id });
-        }}
-      >
-        Activites
-      </Button>
-    </View>
-  );
+    )
+  };
 
   return (
     <View style={styles.container}>
