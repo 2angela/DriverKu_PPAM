@@ -21,7 +21,7 @@ const DriverDetail = ({ navigation, route }) => {
         navigation.navigate("BookingDetails", {
             dataBooking : dataBooking,
             driverName  : dataDriver.name,
-            totalAmount : (parseInt(dataDriver.rate)*parseInt(dataBooking.duration))*days,
+            totalAmount : (parseInt(dataDriver.rate)*parseInt(dataBooking.duration))*(days+1),
             driverId    : `Driver/${idDriver}`
         })
     }
