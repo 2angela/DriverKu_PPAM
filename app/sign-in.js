@@ -103,9 +103,9 @@ export default function SignInScreen({ navigation }) {
       <View style={styles.linkContainer}>
         <Text style={styles.text}>
           Don't have an account?{" "}
-          <Link href="/sign-up" style={styles.link}>
-            Sign Up
-          </Link>
+          <TouchableOpacity onPress={() => navigation.push("SignUp")}>
+            <Text style={styles.link}>Sign Up</Text>
+          </TouchableOpacity>
         </Text>
       </View>
     </View>

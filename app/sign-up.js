@@ -103,8 +103,8 @@ export default function SignUpScreen({ navigation }) {
             newErrors.email = "Something went wrong.";
           }
           setErrors(newErrors);
+          console.log(error);
         });
-      // router.replace("/home");
     }
   };
   return (
@@ -187,9 +187,9 @@ export default function SignUpScreen({ navigation }) {
       <View style={styles.linkContainer}>
         <Text style={styles.text}>
           Have an account?{" "}
-          <Link href="/sign-in" style={styles.link}>
-            Sign In
-          </Link>
+          <TouchableOpacity onPress={() => navigation.push("SignIn")}>
+            <Text style={styles.link}>Sign In</Text>
+          </TouchableOpacity>
         </Text>
       </View>
     </View>
