@@ -12,7 +12,7 @@ export default function SignUpScreen({ navigation }) {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [name, setName] = useState("");
   const [birthyear, setBirthyear] = useState("");
-  const [numBirthYear, setNumBirthYear] = useState();
+
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -61,10 +61,11 @@ export default function SignUpScreen({ navigation }) {
     return newErrors;
   };
 
-  const handleNumberInput = (input) => {
-    const parsedInput = parseInt(input.replace(/[^0-9]/g, ""));
-    setBirthyear(parsedInput);
-  };
+  // const handleNumberInput = (input) => {
+  //   const parsedInput = parseInt(input.replace(/[^0-9]/g, ""));
+  //   console.log(parsedInput);
+  //   setNumBirthYear(parsedInput);
+  // };
 
   const handleSignIn = () => {
     const findErrors = validate();
@@ -73,7 +74,6 @@ export default function SignUpScreen({ navigation }) {
       console.log(findErrors);
       setErrors(findErrors);
     } else {
-      setNumBirthYear(handleNumberInput(birthyear));
       signUp(email, password)
         .then(async (res) => {
           const uid = res.user.uid;
@@ -82,7 +82,7 @@ export default function SignUpScreen({ navigation }) {
             .set({
               email,
               name,
-              numBirthYear,
+              birthyear,
               created_at: firestore.FieldValue.serverTimestamp(),
             })
             .then((response) => {
@@ -107,6 +107,8 @@ export default function SignUpScreen({ navigation }) {
           }
           setErrors(newErrors);
           console.log(error);
+          console.log(newErrors);
+          console.log(email + name + numBirthYear);
         });
     }
   };
