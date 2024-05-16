@@ -4,6 +4,7 @@ import { Link } from "expo-router";
 import { useAuth } from "../auth/AuthProvider";
 import { useState, useEffect } from "react";
 import firestore from "@react-native-firebase/firestore";
+import { err } from "react-native-svg";
 
 export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -11,6 +12,7 @@ export default function SignUpScreen({ navigation }) {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [name, setName] = useState("");
   const [birthyear, setBirthyear] = useState("");
+  const [numBirthYear, setNumBirthYear] = useState();
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -44,9 +46,9 @@ export default function SignUpScreen({ navigation }) {
       newErrors.name = "Name cannot be blank";
     }
 
-    if (!birthyear || birthyear < 1800) {
+    if (!birthyear || parseInt(birthyear) < 1800) {
       newErrors.name = "Year of birth is required";
-    } else if (birthyear > 2006) {
+    } else if (parseInt(birthyear) > 2006) {
       newErrors.birthyear = "You must be 17 or older to use this app";
     }
 
@@ -71,6 +73,7 @@ export default function SignUpScreen({ navigation }) {
       console.log(findErrors);
       setErrors(findErrors);
     } else {
+      setNumBirthYear(handleNumberInput(birthyear));
       signUp(email, password)
         .then(async (res) => {
           const uid = res.user.uid;
@@ -79,7 +82,7 @@ export default function SignUpScreen({ navigation }) {
             .set({
               email,
               name,
-              birthyear,
+              numBirthYear,
               created_at: firestore.FieldValue.serverTimestamp(),
             })
             .then((response) => {
@@ -143,7 +146,11 @@ export default function SignUpScreen({ navigation }) {
           value={birthyear}
           mode="outlined"
           keyboardType="numeric"
-          onChangeText={handleNumberInput}
+          onChangeText={(birthyear) => {
+            setBirthyear(birthyear);
+            setErrors((errors) => ({ ...errors, birthyear: "" }));
+          }}
+          error={errors.password !== ""}
         />
         <HelperText type="error" visible={errors.birthyear !== ""}>
           {errors.birthyear}
