@@ -7,9 +7,9 @@ import { Button, IconButton } from "react-native-paper";
 import moment from "moment-timezone";
 
 export default function OrderDetails({ navigation, route }) {
-  const { user }             = useAuth();
-  const [details, setDetail] = useState({})
-  const { orderID }          = route.params;
+  const { user } = useAuth();
+  const [details, setDetail] = useState({});
+  const { orderID } = route.params;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,10 +34,9 @@ export default function OrderDetails({ navigation, route }) {
           pickupTime: moment(data.startDate).format("HH : mm"),
           total: data.totalAmount,
           payMethod: data.payment_method,
-          payStatus: data.status,
+          payStatus: data.status, //payment status belum ada
           orderStatus: data.status,
           orderID: orderID,
-          order_id : data.order_id
         };
 
         setDetail(orderData);
@@ -64,123 +63,136 @@ export default function OrderDetails({ navigation, route }) {
         style={styles.image}
       />
 
-      {
-        Object.keys(details).length > 0 &&
+      {Object.keys(details).length > 0 && (
         <Fragment>
-          <View style={{ marginVertical:10 }}>
+          <View style={{ marginVertical: 10 }}>
             <View style={{ alignItems: "center" }}>
-              <Text style={{ fontSize:20, fontWeight:700 }}>{details.driverName}</Text>
+              <Text style={{ fontSize: 20, fontWeight: 700 }}>
+                {details.driverName}
+              </Text>
             </View>
-            <View style={{ alignItems: "center", marginVertical:2 }}>
-              <Text style={{ fontWeight:500 }}>{moment(details.date).format("dddd, DD MMM YYYY")}</Text>
+            <View style={{ alignItems: "center", marginVertical: 2 }}>
+              <Text style={{ fontWeight: 500 }}>
+                {moment(details.date).format("dddd, DD MMM YYYY")}
+              </Text>
             </View>
             <View style={{ alignItems: "center" }}>
-              <Text style={{ fontWeight:400 }}>{details.duration} Hours</Text>
+              <Text style={{ fontWeight: 400 }}>{details.duration} Hours</Text>
             </View>
           </View>
-          
+
           <View style={styles.boxContainer}>
             <ScrollView>
-              <View style={{ borderWidth:1, borderColor:"#6b6881", borderRadius:10, paddingHorizontal:20, paddingTop:20, paddingBottom:20, backgroundColor:"#f0f2fe" }}>
-                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
-                    <View style={{ flex:1 }}>
-                      <Text style={styles.textDetail}>
-                        Pickup Location
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.textDetailBody}>
-                        {details.pickupLocation}
-                      </Text>
-                    </View>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#6b6881",
+                  borderRadius: 10,
+                  paddingHorizontal: 20,
+                  paddingTop: 20,
+                  paddingBottom: 20,
+                  backgroundColor: "#f0f2fe",
+                }}
+              >
+                <View
+                  style={{ flexDirection: "row", flex: 1, marginVertical: 5 }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.textDetail}>Pickup Location</Text>
                   </View>
-                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
-                    <View style={{ flex:1 }}>
-                      <Text style={styles.textDetail}>
-                        Pickup Time
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.textDetailBody}>
-                        {details.pickupTime}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
-                    <View style={{ flex:1 }}>
-                      <Text style={styles.textDetail}>
-                        Total Amount
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.textDetailBody}>
-                        Rp {details.total.toLocaleString("id-ID")}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
-                    <View style={{ flex:1 }}>
-                      <Text style={styles.textDetail}>
-                        Payment Method
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.textDetailBody}>
-                        {details.payMethod}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
-                    <View style={{ flex:1 }}>
-                      <Text style={styles.textDetail}>
-                        Payment Status
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.textDetailBody}>
-                        {details.payStatus}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
-                    <View style={{ flex:1 }}>
-                      <Text style={styles.textDetail}>
-                        Order Status
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.textDetailBody}>
-                        {details.payStatus}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{ flexDirection:"row", flex:1, marginVertical:5 }}>
-                    <View style={{ flex:1 }}>
-                      <Text style={styles.textDetail}>
-                        Order ID
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.textDetailBody}>
-                        {details.order_id}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{ marginTop:10 }}>
-                    <Button
-                      style={styles.button}
-                      onPress={() => navigation.push("OrderActivity", { orderID: details.orderID })}
-                    >
-                      <Text style={{ color:"white" }}>
-                        See Activites
-                      </Text>
-                    </Button>
+                  <View>
+                    <Text style={styles.textDetailBody}>
+                      {details.pickupLocation}
+                    </Text>
                   </View>
                 </View>
+                <View
+                  style={{ flexDirection: "row", flex: 1, marginVertical: 5 }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.textDetail}>Pickup Time</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textDetailBody}>
+                      {details.pickupTime}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{ flexDirection: "row", flex: 1, marginVertical: 5 }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.textDetail}>Total Amount</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textDetailBody}>
+                      Rp {details.total.toLocaleString("id-ID")}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{ flexDirection: "row", flex: 1, marginVertical: 5 }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.textDetail}>Payment Method</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textDetailBody}>
+                      {details.payMethod}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{ flexDirection: "row", flex: 1, marginVertical: 5 }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.textDetail}>Payment Status</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textDetailBody}>
+                      {details.payStatus}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{ flexDirection: "row", flex: 1, marginVertical: 5 }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.textDetail}>Order Status</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textDetailBody}>
+                      {details.payStatus}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{ flexDirection: "row", flex: 1, marginVertical: 5 }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.textDetail}>Order ID</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textDetailBody}>{details.orderID}</Text>
+                  </View>
+                </View>
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    style={styles.button}
+                    onPress={() =>
+                      navigation.push("OrderActivity", {
+                        orderID: details.orderID,
+                      })
+                    }
+                  >
+                    <Text style={{ color: "white" }}>See Activites</Text>
+                  </Button>
+                </View>
+              </View>
             </ScrollView>
           </View>
         </Fragment>
-      }
+      )}
       <NavigationBar />
     </ScrollView>
   );
@@ -241,10 +253,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   boxContainer: {
-		flexDirection: "row",
-		justifyContent: "space-around",
-		width: "100%",
-		paddingHorizontal: 20,
-		marginTop: 10,
-	},
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
 });

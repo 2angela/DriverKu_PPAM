@@ -41,7 +41,6 @@ export default function BookingDetails({ navigation, route }) {
   const [activePaymentMethod, setActivePaymentMethod] = useState(
     "BCA Virtual Account"
   );
-  const idOrder = `ID-${new Date().getTime()}`;
 
   const handleCreate = async () => {
     setLoading(true);
@@ -52,7 +51,6 @@ export default function BookingDetails({ navigation, route }) {
         .collection("Order");
 
       const booking = await bookingColRef.add({
-        order_id: idOrder,
         pickup: dataBooking.pickup,
         area: dataBooking.area,
         startDate: dataBooking.startDate,
@@ -60,7 +58,7 @@ export default function BookingDetails({ navigation, route }) {
         endDate: dataBooking.endDate,
         endTime: dataBooking.endTime,
         duration: dataBooking.duration,
-        status: "unpaid",
+        status: "Unpaid",
         driver: driverName,
         driverID: driverId,
         vehicle_types: dataBooking.vehicle_types,
@@ -71,10 +69,9 @@ export default function BookingDetails({ navigation, route }) {
       });
 
       navigation.navigate("Payment", {
-        booking_id : booking.id,
-        totalPrice : totalAmount
-      })
-      
+        booking_id: booking.id,
+        totalPrice: totalAmount,
+      });
     } catch (error) {
       console.log("err => ", error);
       ToastAndroid.show("Failed create booking !", ToastAndroid.SHORT);

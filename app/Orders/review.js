@@ -43,6 +43,18 @@ export default function Review({ navigation, route }) {
 
   const handleCreate = async () => {
     try {
+      if (!driverID) {
+        console.error("Driver ID is required");
+      }
+      if (!user || !user?.uid) {
+        console.error("User ID is required");
+      }
+      if (!orderID) {
+        console.error("Order ID is required");
+      }
+
+      console.log(driverID, user?.uid, orderID);
+
       const reviewColRef = firestore()
         .collection("Driver")
         .doc(driverID)
@@ -55,6 +67,7 @@ export default function Review({ navigation, route }) {
         .doc(orderID);
 
       await reviewColRef.add({
+        orderID: orderID,
         customer: customer,
         rating: rating,
         review: review,

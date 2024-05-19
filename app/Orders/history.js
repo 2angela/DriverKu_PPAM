@@ -1,48 +1,58 @@
-import { Text, View, StyleSheet, FlatList } from "react-native";
+import { Text, View, StyleSheet, FlatList, RefreshControl } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 import { useAuth } from "../../auth/AuthProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { IconButton, Button } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
 import NavigationBar from "../components/navigationbar";
 
 export default function Orders({ navigation }) {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
-  const handleButton = (order) => {
-    if (order.driver == "Unassigned") {
+  const fetchData = async () => {
+    try {
+      const querySnapshot = await firestore()
+        .collection("Customer")
+        .doc(user?.uid)
+        .collection("Order")
+        .orderBy("created_at")
+        .get();
+
+      const data = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        driverID: doc.data().driverID,
+        driver: doc.data().driverID == null ? "Unassigned" : doc.data().driver,
+        created_at: doc.data().created_at.toDate().toDateString(),
+        status: doc.data().status,
+        reviewed: doc.data().reviewed,
+        totalAmount: doc.data().totalAmount,
+      }));
+
+      setOrders(data);
+      console.log("Data:", data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      console.log("Data:", data);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await firestore()
-          .collection("Customer")
-          .doc(user?.uid)
-          .collection("Order")
-          .orderBy("created_at")
-          .get();
-          
-        const data = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          driver: doc.data().driver == null ? "Unassigned" : doc.data().driver,
-          created_at: doc.data().created_at.toDate().toDateString(),
-          status: doc.data().status,
-          reviewed: doc.data().reviewed,
-          totalAmount : doc.data().totalAmount
-        }));
-
-        setOrders(data);
-        console.log("Data:", data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        console.log("Data:", data);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const onRefresh = async () => {
+    setRefresh(true);
+    await fetchData();
+    setRefresh(false);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   const Item = ({ item }) => {
     return (
@@ -76,7 +86,11 @@ export default function Orders({ navigation }) {
                     : navigation.push("Review", { orderID: item.id });
                 }
               }}
-              disabled={item.driver == "Unassigned"}
+              disabled={
+                item.status == "Unpaid" ||
+                item.driver == "Unassigned" ||
+                !item.driverID
+              }
               icon={item.reviewed ? "star-check" : "star-settings-outline"}
               iconColor="#211951"
               size={30}
@@ -86,13 +100,13 @@ export default function Orders({ navigation }) {
         <View style={{ width: 300 }}>
           <Button
             onPress={() => {
-              item.status === "unpaid" ?
-                navigation.navigate("Payment", {
-                  booking_id : item.id,
-                  totalPrice : item.totalAmount !== undefined ? item.totalAmount : 0
-                })
-              :
-                navigation.push("OrderDetails", { orderID: item.id });
+              item.status === "Unpaid"
+                ? navigation.navigate("Payment", {
+                    booking_id: item.id,
+                    totalPrice:
+                      item.totalAmount !== undefined ? item.totalAmount : 0,
+                  })
+                : navigation.push("OrderDetails", { orderID: item.id });
             }}
             mode="elevated"
             icon="arrow-right"
@@ -102,15 +116,8 @@ export default function Orders({ navigation }) {
             See Details
           </Button>
         </View>
-        <Button
-          onPress={() => {
-            navigation.push("OrderActivity", { orderID: item.id });
-          }}
-        >
-          Activites
-        </Button>
       </View>
-    )
+    );
   };
 
   return (
@@ -121,6 +128,9 @@ export default function Orders({ navigation }) {
         renderItem={Item}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        }
       ></FlatList>
       <NavigationBar page="orders" />
     </View>

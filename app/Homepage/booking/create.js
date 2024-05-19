@@ -10,9 +10,7 @@ export default function BookingCreate({ navigation, route }) {
   const [pickup, setPickup] = useState("");
   const [area, setArea] = useState("");
   const status = "Unpaid";
-  const driver = null;
   const { vehicle_types } = route.params;
-  const { user } = useAuth();
 
   const [startTime, setStartTime] = useState(() => {
     const date = new Date();

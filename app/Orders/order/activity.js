@@ -74,6 +74,7 @@ export default function OrderActivity({ navigation, route }) {
         } else {
           console.log("Data already exist");
           setActivities(data.activities);
+          await orderDocRef.update({ status: "Finished" });
         }
       } catch (error) {
         console.error("Error updating data:", error);
