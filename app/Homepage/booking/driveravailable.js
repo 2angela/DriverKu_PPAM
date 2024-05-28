@@ -33,17 +33,18 @@ export default function DriverAvailable({ navigation, route }) {
             service_area: doc.data().service_area,
           }));
 
-          let containLocation = []
-          for(let i=0; i<data.length; i++) {
-            if(data[i].service_area.length > 0) {
-
-              for(let p=0; p<data[i].service_area.length; p++) {
-                if(data[i].service_area[p].toLowerCase() === location.toLowerCase()) {
-                  containLocation.push(data[i])
+          let containLocation = [];
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].service_area.length > 0) {
+              for (let p = 0; p < data[i].service_area.length; p++) {
+                if (
+                  data[i].service_area[p].toLowerCase() ===
+                  location.toLowerCase()
+                ) {
+                  containLocation.push(data[i]);
                   break;
                 }
               }
-
             }
           }
 
@@ -75,7 +76,7 @@ export default function DriverAvailable({ navigation, route }) {
                     <TouchableOpacity
                       style={{ flex: 1, flexDirection: "row" }}
                       onPress={() =>
-                        navigation.navigate("DriverDetail", {
+                        navigation.push("DriverDetail", {
                           idDriver: e.id,
                           dataBooking: dataBooking,
                         })
@@ -93,7 +94,8 @@ export default function DriverAvailable({ navigation, route }) {
                         </View>
                         <View style={{ marginTop: 2 }}>
                           <Text style={styles.textRate}>
-                            Rate : Rp {parseInt(e.rate).toLocaleString("id-ID")}/hour
+                            Rate : Rp {parseInt(e.rate).toLocaleString("id-ID")}
+                            /hour
                           </Text>
                         </View>
                       </View>

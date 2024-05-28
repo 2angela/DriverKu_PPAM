@@ -301,6 +301,7 @@ export default function BookingCreate({ navigation, route }) {
               disabled={loading}
               value={duration}
               mode="outlined"
+              keyboardType="numeric"
               onChangeText={(duration) => {
                 setDuration(duration);
                 setErrors((errors) => ({ ...errors, duration: "" }));

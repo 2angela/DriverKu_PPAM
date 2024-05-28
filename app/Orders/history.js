@@ -29,8 +29,10 @@ export default function Orders({ navigation }) {
         reviewed: doc.data().reviewed,
         totalAmount: doc.data().totalAmount,
       }));
-
-      setOrders(data);
+      const sortedOrders = data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+      setOrders(sortedOrders);
       console.log("Data:", data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -101,7 +103,7 @@ export default function Orders({ navigation }) {
           <Button
             onPress={() => {
               item.status === "Unpaid"
-                ? navigation.navigate("Payment", {
+                ? navigation.push("Payment", {
                     booking_id: item.id,
                     totalPrice:
                       item.totalAmount !== undefined ? item.totalAmount : 0,

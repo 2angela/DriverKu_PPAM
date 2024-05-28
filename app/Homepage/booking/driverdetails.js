@@ -25,7 +25,7 @@ const DriverDetail = ({ navigation, route }) => {
     const duration = moment.duration(endDate.diff(startDate));
     const days = duration.asDays();
 
-    navigation.navigate("BookingDetails", {
+    navigation.push("BookingDetails", {
       dataBooking: dataBooking,
       driverName: dataDriver.name,
       totalAmount:

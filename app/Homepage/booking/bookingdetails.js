@@ -41,6 +41,7 @@ export default function BookingDetails({ navigation, route }) {
   const [activePaymentMethod, setActivePaymentMethod] = useState(
     "BCA Virtual Account"
   );
+  const idOrder = `ID-${new Date().getTime()}`;
 
   const handleCreate = async () => {
     setLoading(true);
@@ -68,7 +69,7 @@ export default function BookingDetails({ navigation, route }) {
         created_at: firestore.FieldValue.serverTimestamp(),
       });
 
-      navigation.navigate("Payment", {
+      navigation.push("Payment", {
         booking_id: booking.id,
         totalPrice: totalAmount,
       });
