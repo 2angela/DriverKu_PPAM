@@ -1,16 +1,30 @@
 import { useState } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { TextInput, HelperText, Button, IconButton } from "react-native-paper";
-import firestore from "@react-native-firebase/firestore";
-import { useAuth } from "../../../auth/AuthProvider";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import NavigationBar from "../../components/navigationbar";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment-timezone";
 
 export default function BookingCreate({ navigation, route }) {
   const [pickup, setPickup] = useState("");
   const [area, setArea] = useState("");
   const status = "Unpaid";
   const { vehicle_types } = route.params;
+  const [duration, setDuration] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    pickup: "",
+    area: "",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    duration: "",
+  });
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
   const [startTime, setStartTime] = useState(() => {
     const date = new Date();
@@ -35,42 +49,33 @@ export default function BookingCreate({ navigation, route }) {
     return date;
   });
 
-  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-
-  const handleStartDateChange = (event, date) => {
+  const handleStartDateChange = (date) => {
     setShowStartDatePicker(false);
-    setStartDate(date || startDate);
+
+    const currentStartDate = date
+    setStartDate(currentStartDate || startDate);
   };
 
-  const handleStartTimeChange = (event, date) => {
+  const handleStartTimeChange = (date) => {
     setShowStartTimePicker(false);
-    setStartTime(date || startTime);
+
+    const currentStartTime = date
+    setStartTime(currentStartTime || startTime);
   };
 
-  const handleEndDateChange = (event, date) => {
+  const handleEndDateChange = (date) => {
     setShowEndDatePicker(false);
-    setEndDate(date || endDate);
+
+    const currentEndDate = date
+    setEndDate(currentEndDate || endDate);
   };
 
-  const handleEndTimeChange = (event, date) => {
+  const handleEndTimeChange = (date) => {
     setShowEndTimePicker(false);
-    setEndTime(date || endTime);
-  };
 
-  const [duration, setDuration] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({
-    pickup: "",
-    area: "",
-    startDate: "",
-    startTime: "",
-    endDate: "",
-    endTime: "",
-    duration: "",
-  });
+    const currentEndTime = date
+    setEndTime(currentEndTime || endTime);
+  };
 
   const validate = () => {
     let newErrors = {
@@ -155,10 +160,10 @@ export default function BookingCreate({ navigation, route }) {
         dataBooking: {
           pickup,
           area,
-          startTime,
-          startDate,
-          endTime,
-          endDate,
+          startTime : moment(startTime).format(),
+          startDate : moment(startDate).format(),
+          endTime : moment(endTime).format(),
+          endDate : moment(endDate).format(),
           duration,
           status,
           vehicle_types,
@@ -228,14 +233,16 @@ export default function BookingCreate({ navigation, route }) {
                 value={startDate.toDateString()}
                 onTouchStart={() => setShowStartDatePicker(true)}
               />
-              {showStartDatePicker && (
-                <DateTimePicker
-                  value={startDate}
-                  mode="datetime"
-                  display="spinner"
-                  onChange={handleStartDateChange}
-                />
-              )}
+
+              <DateTimePickerModal
+                isVisible={showStartDatePicker}
+                mode="date"
+                date={startDate}
+                onConfirm={handleStartDateChange}
+                onCancel={() => setShowStartDatePicker(false)}
+              />
+
+              {/* start time */}
 
               <TextInput
                 style={{ flex: 1 }}
@@ -243,15 +250,15 @@ export default function BookingCreate({ navigation, route }) {
                 value={startTime.toTimeString()}
                 onTouchStart={() => setShowStartTimePicker(true)}
               />
-              {showStartTimePicker && (
-                <DateTimePicker
-                  value={startTime}
-                  mode="time"
-                  is24Hour={true}
-                  display="spinner"
-                  onChange={handleStartTimeChange}
-                />
-              )}
+
+              <DateTimePickerModal
+                isVisible={showStartTimePicker}
+                mode="time"
+                is24Hour={true}
+                date={startTime}
+                onConfirm={handleStartTimeChange}
+                onCancel={() => setShowStartTimePicker(false)}
+              />
             </View>
 
             {/* End Date Picker */}
@@ -262,14 +269,14 @@ export default function BookingCreate({ navigation, route }) {
                 value={endDate.toDateString()}
                 onTouchStart={() => setShowEndDatePicker(true)}
               />
-              {showEndDatePicker && (
-                <DateTimePicker
-                  value={endDate}
-                  mode="datetime"
-                  display="spinner"
-                  onChange={handleEndDateChange}
-                />
-              )}
+
+              <DateTimePickerModal
+                isVisible={showEndDatePicker}
+                mode="date"
+                date={endDate}
+                onConfirm={handleEndDateChange}
+                onCancel={() => setShowEndDatePicker(false)}
+              />
 
               <TextInput
                 style={{ flex: 1 }}
@@ -277,15 +284,15 @@ export default function BookingCreate({ navigation, route }) {
                 value={endTime.toTimeString()}
                 onTouchStart={() => setShowEndTimePicker(true)}
               />
-              {showEndTimePicker && (
-                <DateTimePicker
-                  value={endTime}
-                  mode="time"
-                  is24Hour={true}
-                  display="spinner"
-                  onChange={handleEndTimeChange}
-                />
-              )}
+
+              <DateTimePickerModal
+                isVisible={showEndTimePicker}
+                mode="time"
+                is24Hour={true}
+                date={endTime}
+                onConfirm={handleEndTimeChange}
+                onCancel={() => setShowEndTimePicker(false)}
+              />
             </View>
 
             <TextInput

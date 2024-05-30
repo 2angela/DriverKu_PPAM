@@ -5,10 +5,10 @@ import {
   ScrollView,
   Image,
   ToastAndroid,
-  SafeAreaView,
+  TouchableOpacity
 } from "react-native";
 import { useState } from "react";
-import { Button, Provider, ThemeProvider } from "react-native-paper";
+import { Button, IconButton, Provider, ThemeProvider } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import moment from "moment-timezone";
 import firestore from "@react-native-firebase/firestore";
@@ -83,6 +83,14 @@ export default function BookingDetails({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      <IconButton
+        onPress={() => navigation.goBack()}
+        icon="arrow-left"
+        size={24}
+        iconColor="#211951"
+        style={{ alignSelf: "flex-start", marginLeft: 15 }}
+      />
+
       <View style={styles.textRow}>
         <Text style={styles.title}>Booking Details</Text>
       </View>
@@ -304,6 +312,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 20,
     marginTop: 10,
+    marginBottom :300
   },
   button: {
     color: "white",

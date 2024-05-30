@@ -9,7 +9,7 @@ import {
 import { useCallback, useState } from "react";
 import { useFocusEffect } from "expo-router";
 import firestore from "@react-native-firebase/firestore";
-import { Button } from "react-native-paper";
+import { Button, IconButton } from "react-native-paper";
 import moment from "moment-timezone";
 import NavigationBar from "../../components/navigationbar";
 
@@ -108,6 +108,14 @@ const DriverDetail = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      <IconButton
+        onPress={() => navigation.goBack()}
+        icon="arrow-left"
+        size={24}
+        iconColor="#211951"
+        style={{ alignSelf: "flex-start", marginLeft: 15 }}
+      />
+
       <View style={styles.textRow}>
         <Text style={styles.title}>Drivers Details</Text>
       </View>

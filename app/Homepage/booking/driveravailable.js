@@ -5,11 +5,13 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  LogBox,
 } from "react-native";
 import NavigationBar from "../../components/navigationbar";
 import { useCallback, useState } from "react";
 import { useFocusEffect } from "expo-router";
 import firestore from "@react-native-firebase/firestore";
+import { IconButton } from "react-native-paper";
 
 export default function DriverAvailable({ navigation, route }) {
   const { location, vehicle_types, dataBooking } = route.params;
@@ -60,6 +62,14 @@ export default function DriverAvailable({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      <IconButton
+        onPress={() => navigation.goBack()}
+        icon="arrow-left"
+        size={24}
+        iconColor="#211951"
+        style={{ alignSelf: "flex-start", marginLeft: 15 }}
+      />
+
       <View style={styles.textRow}>
         {dataDriver.length > 0 && (
           <Text style={styles.title}>Drivers Avaliable</Text>
@@ -141,6 +151,10 @@ export default function DriverAvailable({ navigation, route }) {
     </View>
   );
 }
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const styles = StyleSheet.create({
   container: {
