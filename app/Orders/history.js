@@ -74,14 +74,6 @@ export default function Orders({ navigation }) {
           <View style={{ paddingHorizontal: 10 }}>
             <IconButton
               onPress={() => {
-                navigation.push("Orders");
-              }}
-              icon="message-reply-text"
-              iconColor="#211951"
-              size={30}
-            />
-            <IconButton
-              onPress={() => {
                 {
                   item.reviewed
                     ? null

@@ -72,7 +72,7 @@ export default function DriverAvailable({ navigation, route }) {
 
       <View style={styles.textRow}>
         {dataDriver.length > 0 && (
-          <Text style={styles.title}>Drivers Avaliable</Text>
+          <Text style={styles.title}>Drivers Available</Text>
         )}
       </View>
 
@@ -153,7 +153,7 @@ export default function DriverAvailable({ navigation, route }) {
 }
 
 LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
+  "Non-serializable values were found in the navigation state",
 ]);
 
 const styles = StyleSheet.create({
